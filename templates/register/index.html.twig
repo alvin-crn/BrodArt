@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'inscrire - Brod'Art{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">{% endblock %}
+
+{% block body %}
+<div class="register-page">
+    <div class="div-form register">
+        <h1>Créer un compte</h1>
+        {% if notif %}
+        <div class="notif">{{ notif }}</div>
+        {% endif %}
+        {{ form_start(formRegister) }}
+        <label for="firstname">Votre prénom</label><br>
+        {{ form_errors(formRegister.firstname) }}
+        {{ form_widget(formRegister.firstname) }}<br>
+        <label for="lastname">Votre nom</label><br>
+        {{ form_errors(formRegister.lastname) }}
+        {{ form_widget(formRegister.lastname) }}<br>
+        <label for="email">Votre adresse email</label><br>
+        {{ form_errors(formRegister.email) }}
+        {{ form_widget(formRegister.email) }}<br>
+        {{ form_row(formRegister.password) }}
+        <button class="btn btn-lg btn-primary" type="submit"><span class="text">S'inscrire</span></button>
+        {{ form_end(formRegister) }}
+        <a href="{{ path('app_login') }}">J'ai déjà un compte</a>
+    </div>
+</div>
+{% endblock %}

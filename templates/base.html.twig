@@ -1,17 +1,124 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Brod'Art - Broderie personnalisée{% endblock %}</title>
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  {% block css %} {% endblock %}
+  <script src="https://kit.fontawesome.com/6f4e25e570.js" crossorigin="anonymous"></script>
+  {% block javascript %} {% endblock %}
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="/"><img src="{{ asset('media/logo-brodart.png') }}" alt="logo brod'art"></a>
+          </li>
+          <form method="get" action="/nos-articles">
+            <input type="text" id="string" name="string" placeholder="Rechercher...">
+            <button type="submit"><i class="fas fa-search"></i></button>
+          </form>
+          <li class="btn-1 login_button">
+            {% if app.user %}
+            <a class="link-nav btn-1"><i class="fas fa-user-circle"></i>{{ app.user.firstname }}<i
+                class="fas fa-caret-down"></i></a>
+            <a><i class="fas fa-user-circle mobile"></i></a>
+            {% else %}
+            <a href="{{ path('app_login') }}" class="link-nav">Connexion</a>
+            <a href="{{ path('app_login') }}"><i class="fas fa-user-circle mobile"></i></a>
+            {% endif %}
+          </li>
+          <li>
+            <a href="{#{{ path('cart') }}#}" class="link-nav">Panier</a>
+            <a href="{#{{ path('cart') }}#}"><i class="fas fa-shopping-basket"></i></a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    {% if app.user %}
+    <div class="loginchoise">
+      <div class="menu-login">
+        <a href="{#{{ path('account') }}#}">Mon compte</a>
+        <a href="{#{{ path('account_order') }}#}">Mes commandes</a>
+        <a href="{#{{ path('account_address') }}#}">Mes adresses</a>
+        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+      </div>
+    </div>
+    {% endif %}
+    <div class="bg-opacity"></div>
+    <div class="btn-burger">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="nav-content">
+      <div class="profil-user">
+        {% if app.user %}
+        <a href="{#{{ path('account') }}#}">
+          <h2><i class="far fa-user"></i>Bonjour, {{ app.user.firstname }}</h2>
+        </a>
+        {% else %}
+        <a href="{{ path('app_login') }}">
+          <h2><i class="far fa-user"></i>Se connecter</h2>
+        </a>
+        {% endif %}
+      </div>
+      <div class="link-onglet">
+        <ul>
+          <li id="title">Tendances</li>
+          <li><a href="{#{{ path('best_sale') }}#}">Meilleures ventes</a></li>
+          <li><a href="{#{{ path('new_product') }}#}">Nouveautés</a></li>
+          <li id="title-2">Catégories</li>
+          <li><a href="{#{{ path('products') }}#}">Tous les articles</a></li>
+          <li><a href="/categorie/T-shirt">T-shirt</a></li>
+          <li><a href="/categorie/Sweat">Sweat & Pullover</a></li>
+          <li><a href="/categorie/Short">Short</a></li>
+          <li><a href="/categorie/Pantalon">Pantalon</a></li>
+          <li><a href="/categorie/Chaussette">Chaussette</a></li>
+          <li><a href="/categorie/Casquette">Casquette</a></li>
+          <li><a href="/categorie/Bonnet">Bonnet</a></li>
+          <li><a href="/categorie/Echarpe">Echarpe</a></li>
+          <li><a href="/categorie/Gant">Gant</a></li>
+          <li><a href="/categorie/Accessoire">Accessoire</a></li>
+          <li id="title-2">Aide et paramètres</li>
+          <li><a href="#">Contactez-nous</a></li>
+          <li><a href="#">Qui sommes-nous ?</a></li>
+          <li><a href="#" id="last">Conditions générals</a></li>
+        </ul>
+      </div>
+    </div>
+    <main>
+      {% block body %}{% endblock %}
+    </main>
+    <footer>
+      <div class="footer-grid-1">
+        <a href="/"><img src="{{ asset('media/logo-brodart.png') }}" alt="logo brod'art"></a>
+        <ul>
+          <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
+          <li><a href=""><i class="fab fa-twitter"></i></a></li>
+          <li><a href=""><i class="fab fa-snapchat-ghost"></i></a></li>
+          <li><a href=""><i class="fab fa-instagram"></i></a></li>
+          <li><a href=""><i class="fab fa-tiktok"></i></a></li>
+        </ul>
+      </div>
+      <div class="footer-grid-2">
+        <ul>
+          <li><a href="#">Conditions générals de vente</a></li>
+          <li><a href="#">Cookies</a></li>
+          <li><a href="#">Informations personnelles</a></li>
+          <li>© 2025 Brod'Art</li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="{{ asset('js/app.js') }}"></script>
+  {% block script %}{% endblock %}
+</body>
+
 </html>

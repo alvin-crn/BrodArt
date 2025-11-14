@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock css %}
+
+{% block body %}
+<div class="home-page">
+  <div class="home-page-center">
+    <div class="carrousel-container">
+      <div class="carrousel-slider">
+        {% for header in headers %}
+        {% if loop.first %}
+        <img src="/uploads/{{ header.illustration }}" alt="" class="carrousel-slider-img NOW">
+        {% else %}
+        <img src="/uploads/{{ header.illustration }}" alt="" class="carrousel-slider-img">
+        {% endif %}
+        {% endfor %}
+      </div>
+      <div class="carrousel-pagination">
+        {% for header in headers %}
+        {% if loop.first %}
+        <div class="carrousel-page active"><span></span></div>
+        {% else %}
+        <div class="carrousel-page"><span></span></div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="best-seller-container">
+      <h1>Meilleure vente</h1>
+      <div class="card-container">
+        {% for product in bestseller %}
+        <div class="card">
+          <div class="pic">
+            <a href="{{ path('product', { 'slug' : product.slug } ) }}"><img src="/uploads/{{ product.illustration }}"
+                alt="{{ product.subtitle }}"></a>
+          </div>
+          <div class="card-footer">
+            <div class="text">
+              <h3>{{ product.name }}</h3>
+              <div class="price">
+                {% if product.promo %}
+                <p id="price">{{ (product.price / 100)|number_format(2, ',', '.') }} €</p>
+                <p id="promo">{{ (product.promo / 100)|number_format(2, ',', '.') }} €</p>
+                {% else %}
+                <p>{{ (product.price / 100)|number_format(2, ',', '.') }} €</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="nos-valeurs">
+      <div class="text">
+        <h1>Chez Brod'Art</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia cupiditate qui ullam voluptate ab?</p>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae, aliquid esse molestiae quas perspiciatis
+          tempora repellat maxime laudantium harum accusamus vero totam, quia ratione suscipit obcaecati veniam
+          repudiandae exercitationem! Voluptatum?</p>
+      </div>
+      <div class="pic">
+        <img src="{{ asset('media/valeur_section_pic.jpeg') }}" alt="photo de broderie">
+      </div>
+    </div>
+    <div class="categorys">
+      <h1>Catégories</h1>
+      <div class="grid-container">
+        {% for categorie in categories %}
+        <div class="category-container">
+          <a href="{{ path('product_by_category', { 'category' : categorie.name } ) }}">
+            <button>
+              <span class="label">{{ categorie.name }}</span>
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="none" d="M0 0h24v24H0z"></path>
+                  <path fill="currentColor"
+                    d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path>
+                </svg>
+              </span>
+            </button>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+{% endblock %}

@@ -1,0 +1,285 @@
+/* ************** * HOME PAGE * ************** */
+
+.home-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.home-page .home-page-center {
+  height: 100%;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* CARROUSEL */
+
+.home-page .home-page-center .carrousel-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.home-page .home-page-center .carrousel-container .carrousel-slider {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 15px;
+}
+
+.home-page .home-page-center .carrousel-container .carrousel-slider .carrousel-slider-img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  object-fit: cover;
+}
+
+.home-page .home-page-center .carrousel-container .carrousel-slider .carrousel-slider-img.NOW {
+  left: 0;
+}
+
+.home-page .home-page-center .carrousel-container .carrousel-pagination {
+  margin-top: -15px;
+  z-index: 2;
+  display: flex;
+}
+
+.home-page .home-page-center .carrousel-container .carrousel-pagination .carrousel-page {
+  background-image: linear-gradient(180deg, #8b8b8b, #8b8b8b);
+  border-radius: 10px;
+  padding: 2px 11px;
+  margin: 0 5px;
+
+  transform: all 0.4s;
+}
+
+.home-page .home-page-center .carrousel-container .carrousel-pagination .carrousel-page.active {
+  background-image: linear-gradient(180deg, rgb(247, 110, 26), #c0293b);
+}
+
+/* BESTSELLER */
+
+.home-page .home-page-center .best-seller-container {
+  width: 100%;
+  margin: 100px 0;
+}
+
+.home-page .home-page-center .best-seller-container h1 {
+  text-align: center;
+  font-size: 2.6em;
+  text-transform: uppercase;
+  font-weight: normal;
+  color: #616161;
+}
+
+.home-page .home-page-center .best-seller-container .card-container {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-content: start;
+  margin: 20px 0;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card {
+  margin: 20px;
+  width: 300px;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .pic {
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+  transition: 0.3s ease-out;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card:hover .pic img {
+  transform: scale(1.1);
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .card-footer {
+  width: 100%;
+  background-color: #fff;
+  padding: 20px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 0 20px 20px;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .card-footer .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .card-footer .text h3 {
+  font-weight: normal;
+  text-align: center;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .card-footer .text .price {
+  display: flex;
+  justify-content: end;
+  margin-top: 10px;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .card-footer .text p {
+  font-weight: bold;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .card-footer .text p#price {
+  color: #616161;
+  text-decoration: line-through;
+  font-weight: normal;
+}
+
+.home-page .home-page-center .best-seller-container .card-container .card .card-footer .text p#promo {
+  color: #ee2424;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+/* NOS VALEURS */
+
+.home-page .home-page-center .nos-valeurs {
+  width: 100%;
+  height: 500px;
+  margin: 100px 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.home-page .home-page-center .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home-page .home-page-center .text h1 {
+  font-weight: normal;
+  margin-bottom: 15px;
+  color: #f76e1a;
+}
+
+.home-page .home-page-center .text p {
+  margin: 5px 0;
+  color: #616161;
+}
+
+.home-page .home-page-center .pic {
+  height: 100%;
+  width: 100%;
+}
+
+.home-page .home-page-center .pic img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* CATEGORIES */
+
+.home-page .home-page-center .categorys {
+  width: 100%;
+  margin: 100px 0;
+}
+
+.home-page .home-page-center .categorys h1 {
+  text-align: center;
+  font-size: 2.6em;
+  text-transform: uppercase;
+  font-weight: normal;
+  color: #616161;
+}
+
+.home-page .home-page-center .categorys .grid-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+  margin: 20px 0;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container a {
+  width: 75%;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container button {
+  position: relative;
+  width: 100%;
+  font-size: 14px;
+  letter-spacing: 3px;
+  height: 3em;
+  border: none;
+  background-color: #fff;
+  color: #616161;
+  text-transform: uppercase;
+  overflow: hidden;
+  border: #616161 2px solid;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container button::before {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  left: 0;
+  height: 0px;
+  width: 100%;
+  background: rgb(247, 110, 26);
+  background: linear-gradient(90deg, rgb(247, 111, 26) 20%, #c0293b 100%);
+  transition: 0.2s;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container button .label {
+  position: relative;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container button .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3em;
+  width: 3em;
+  position: absolute;
+  top: 3em;
+  right: 0;
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container button:hover::before {
+  height: 100%;
+}
+
+.home-page .home-page-center .categorys .grid-container .category-container button:hover .icon {
+  top: 0;
+  opacity: 1;
+}

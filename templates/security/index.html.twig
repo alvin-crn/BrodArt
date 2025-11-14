@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Se connecter - Brod'Art{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="register-page">
+  <div class="div-form login">
+    <h1>Se connecter</h1>
+    {% for message in app.flashes('notif') %}
+    <div class="notif">{{ message }}</div>
+    {% endfor %}
+
+    {% if error %}
+    <div class="notif">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+    <div class="mb-3">
+      Vous êtes connecté en tant que {{ app.user.email }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+    </div>
+    {% endif %}
+    <form method="post">
+      <label for="inputEmail">Adresse email</label>
+      <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control"
+        autocomplete="email" required autofocus>
+      <label for="inputPassword">Mot de passe</label>
+      <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password"
+        required>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+      <button class="btn btn-lg btn-primary" type="submit"><span class="text">Connexion</span></button>
+    </form>
+    <a href="{#{{ path('reset_password') }}#}">Mot de passe oublié ?</a>
+    <a href="{{ path('register') }}">Je n'ai pas de compte...</a>
+  </div>
+</div>
+{% endblock %}
