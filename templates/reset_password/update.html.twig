@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié - Brod'Art{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ asset('css/login.css') }}">{% endblock css %}
+
+{% block body %}
+    <div class="register-page">
+        <div class="div-form update_password">
+            <h1>Changer mon mot de passe</h1>
+            {% for message in app.flashes('notif') %}
+                <div class="notif">{{ message }}</div>
+            {% endfor %}
+            {{ form_start(form) }}
+                {{ form_errors(form.password) }}
+                {{ form_help(form.password) }}
+                {{ form_widget(form.password) }}
+                <button type="submit"><span class="text">Valider</span></button>
+            {{ form_end(form) }}
+            <a href="{{ path('app_login') }}">Je me connecte</a>
+        </div>
+    </div>
+{% endblock %}
