@@ -11,6 +11,8 @@
         </div>
         {% if active == "account" %}
             {% include "account/me/me.html.twig" %}
+        {% elseif active == "editPsw" %}
+            {% include "account/password/password.html.twig" %}
         {% endif %}
     </div>
 </div>
