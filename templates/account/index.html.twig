@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ metaTitle }} - Brod'Art{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ asset('css/account.css') }}">{% endblock css %}
+
+{% block body %}
+<div class="page-dashbord-user">
+    <div class="grid-dashbord-user">
+        <div class="left-container">
+            {% include "account/layout/menu.html.twig" %}
+        </div>
+        {% if active == "account" %}
+            {% include "account/me/me.html.twig" %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
