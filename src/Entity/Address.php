@@ -27,7 +27,7 @@ class Address
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $compagny;
+    private ?string $compagny = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $address;
@@ -107,7 +107,7 @@ class Address
         return $this->compagny;
     }
 
-    public function setCompagny(string $compagny): self
+    public function setCompagny(?string $compagny): self
     {
         $this->compagny = $compagny;
 

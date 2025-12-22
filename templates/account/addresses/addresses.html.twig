@@ -1,0 +1,36 @@
+<div class="right-container address">
+    <a href="{{ path('account_address_add') }}"><button><span>Ajouter une adresse</span></button></a>
+    <h1>Mes adresses</h1>
+    <p>Retrouvez ici vos adresses de livraison enregistrées</p>
+    {% if app.user.addresses|length == 0 %}
+    <h2>Vous n'avez pas d'adresse enregistrée</h2>
+    <p>Vous pouvez en ajouter une <a href="{{ path('account_address_add') }}">ici</a></p>
+    {% else %}
+    <div class="cards-addresses">
+        {% for address in app.user.addresses %}
+        <div class="card-address">
+            <h3>{{ address.name }}</h3>
+            <div class="info-address user">
+                <p>{{ address.firstname }}</p>
+                <p>{{ address.lastname }}</p>
+                {% if address.compagny %}
+                <p>{{ address.compagny }}</p>
+                {% endif %}
+            </div>
+            <div class="info-address address">
+                <p>{{ address.address }}</p>
+            </div>
+            <div class="info-address location">
+                <p>{{ address.city }}</p>
+                <p>{{ address.postal }}</p>
+                <p>{{ address.country }}</p>
+            </div>
+            <div class="info-address button">
+                <a href="{{ path('account_address_edit', { 'id' : address.id }) }}"><button><span>Modifier</span></button></a>
+                <a href="{{ path('account_address_delete', { 'id' : address.id }) }}"><button><span>Supprimer</span></button></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>

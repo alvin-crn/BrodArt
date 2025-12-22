@@ -13,6 +13,10 @@
             {% include "account/me/me.html.twig" %}
         {% elseif active == "editPsw" %}
             {% include "account/password/password.html.twig" %}
+        {% elseif active == "addresses" %}
+            {% include "account/addresses/addresses.html.twig" %}
+        {% elseif active == "address_add" or active == "address_edit" %}
+            {% include "account/addresses/address_form.html.twig" %}
         {% endif %}
     </div>
 </div>
