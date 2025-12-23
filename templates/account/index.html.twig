@@ -17,6 +17,10 @@
             {% include "account/addresses/addresses.html.twig" %}
         {% elseif active == "address_add" or active == "address_edit" %}
             {% include "account/addresses/address_form.html.twig" %}
+        {% elseif active == "orders" %}
+            {% include "account/orders/orders.html.twig" %}
+        {% elseif active == "order_detail" %}
+            {% include "account/orders/order_detail.html.twig" %}
         {% endif %}
     </div>
 </div>

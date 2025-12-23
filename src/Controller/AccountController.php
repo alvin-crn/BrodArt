@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\Address;
 use App\Form\AddressType;
 use App\Form\ChangePasswordType;
@@ -132,7 +133,39 @@ class AccountController extends AbstractController
         }
 
         return $this->redirectToRoute('account_addresses', [
-            'actives' => 'addresses'
+            'active' => 'addresses',
+            'metaTitle' => 'Mes adresses'
         ]);
     }
+
+    #[Route('/mes-commandes', name: '_orders')]
+    public function myOrders(): Response
+    {
+        $orders = $this->em->getRepository(Order::class)->findSuccessOrders($this->getUser());
+       
+        return $this->render('account/index.html.twig', [
+            'orders' => $orders,
+            'active' => 'orders',
+            'metaTitle' => 'Mes commandes'
+        ]);
+    }
+
+    #[Route('/mes-commandes/{ref}', name: '_order_detail')]
+    public function orderDetail($ref): Response
+    {
+        $order = $this->em->getRepository(Order::class)->findOneByReference($ref);
+
+        if(!$order || $order->getUser() != $this->getUser()){
+            return $this->redirectToRoute('account_orders');
+        }
+
+        $metaTitle = "Commande n°".$order->getReference();
+       
+        return $this->render('account/index.html.twig', [
+            'order' => $order,
+            'active' => 'order_detail',
+            'metaTitle' => $metaTitle
+        ]);
+    }
+
 }

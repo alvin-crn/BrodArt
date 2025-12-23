@@ -42,9 +42,9 @@
     {% if app.user %}
     <div class="loginchoise">
       <div class="menu-login">
-        <a href="{#{{ path('account') }}#}">Mon compte</a>
-        <a href="{#{{ path('account_order') }}#}">Mes commandes</a>
-        <a href="{#{{ path('account_address') }}#}">Mes adresses</a>
+        <a href="{{ path('account') }}">Mon compte</a>
+        <a href="{{ path('account_orders') }}">Mes commandes</a>
+        <a href="{{ path('account_addresses') }}">Mes adresses</a>
         <a href="{{ path('app_logout') }}">Se déconnecter</a>
       </div>
     </div>
@@ -58,7 +58,7 @@
     <div class="nav-content">
       <div class="profil-user">
         {% if app.user %}
-        <a href="{#{{ path('account') }}#}">
+        <a href="{{ path('account') }}">
           <h2><i class="far fa-user"></i>Bonjour, {{ app.user.firstname }}</h2>
         </a>
         {% else %}

@@ -1,0 +1,49 @@
+<div class="right-container-order">
+    <div class="header">
+        <h1 id="order_show">Ma commande n°{{ order.reference }}</h1>
+        <p>Détail et suivi de votre commande</p>
+    </div>
+    <div class="order">
+        <p>Référence de la commande : {{ order.reference }}</p>
+        <p>Commande passée le : {{ order.createdAt|date('d/m/Y') }}</p>
+        <p>Statue de la commande :
+            {% if order.state == 1 %}
+            Nous avons reçu votre commande, nous la préparerons dès que possible.
+            {% elseif order.state == 2 %}
+            Nous préparons votre commande.
+            {% elseif order.state == 3 %}
+            Nous avons envoyée votre commande.
+            {% endif %}</p>
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Photo à broder</th>
+                    <th>Article</th>
+                    <th>Taille</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in order.orderDetails %}
+                <tr>
+                    <td><img src="{{ product.photoClient }}" alt=""></td>
+                    <td>{{ product.product }}</td>
+                    <td>{{ product.size }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ ( product.price / 100 )|number_format(2, ',', ',') }} €</td>
+                    <td>{{ ( product.total / 100 )|number_format(2, ',', ',') }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="cost-order">
+            <strong>Sous-total : </strong>{{ (order.getTotal / 100)|number_format(2, ',', ',') }} €<br>
+            <strong>Livraison : </strong>{{ (order.carrierPrice / 100)|number_format(2, ',', ',') }} €<br>
+            <strong>Total : </strong>{{ ((order.carrierPrice + order.getTotal) / 100 )|number_format(2, ',', ',') }} €
+        </div>
+    </div>
+</div>

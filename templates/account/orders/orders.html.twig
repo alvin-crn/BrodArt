@@ -1,0 +1,36 @@
+<div class="right-container-order">
+    <div class="header">
+        <h1>Mes commandes</h1>
+        <p>Retrouvez ici vos commandes</p>
+    </div>
+    {% if orders|length == 0 %}
+    <div class="orders">
+        <p>Vous n'avez passé aucune commande</p>
+    </div>
+    {% else %}
+    {% for order in orders %}
+    <div class="orders">
+        <table>
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Passée le</th>
+                    <th>Produit(s)</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span>{{ order.reference }}</span></td>
+                    <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                    <td>{{ order.orderDetails|length }}</td>
+                    <td>{{ ((order.carrierPrice + order.getTotal) / 100 )|number_format(2, ',', ',') }} €</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="{{ path('account_order_show', { 'ref' : order.reference }) }}"><button><span>Voir ma
+                    commande</span></button></a>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>

@@ -6,6 +6,7 @@
         <li><a href="{{ path('account') }}" {% if active == "account" %}class="active"{% endif %}>Mes informations personnelles<i class="fas fa-address-card"></i></a></li>
         <li><a href="{{ path('account_password') }}" {% if active == "editPsw" %}class="active"{% endif %}>Modifier mon mot de passe<i class="fas fa-key"></i></a></li>
         <li><a href="{{ path('account_addresses') }}" {% if active == "addresses" or active == 'address_add' or active == 'address_edit' %}class="active"{% endif %}>Gérer mes adresses<i class="fas fa-address-book"></i></a></li>
+        <li><a href="{{ path('account_orders') }}" {% if active == "orders" or active == "order_detail" %}class="active"{% endif %}>Mes commandes<i class="fas fa-truck"></i></a></li>
         <li><a href="{{ path('app_logout') }}">Déconnexion<i class="fas fa-power-off"></i></a></li>
     </ul>
 </div>
