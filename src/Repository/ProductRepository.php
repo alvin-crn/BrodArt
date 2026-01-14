@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Class\Search;
+use App\Service\SearchService;
 use App\Entity\Product;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -23,11 +23,11 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @return Product[]
      */
-    public function findWithSearch(Search $search)
+    public function findWithSearch(SearchService $search)
     {
         $query = $this
             ->createQueryBuilder('p') //p pour product
-            ->select('cat', 'p', 'color', 'productSizes') // cat pour cat & p pour product & color pour color & s pour size
+            ->select('cat', 'p', 'color', 'productSizes') // cat pour catégorie & p pour product & color pour color & productSizes pour size
             ->join('p.category', 'cat') //jointure entre produit de cat et cat
             ->join('p.color', 'color') //jointure entre produit de color et color
             ->join('p.productSizes', 'productSizes'); //jointure entre produit de productsize et size

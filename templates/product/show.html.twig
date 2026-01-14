@@ -1,0 +1,188 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} - Brod'Art{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/product.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container-article">
+    <div class="grid-container-article">
+        <div class="photo-container">
+            <div class="row">
+                <div class="photo-slider">
+                    <img src="/media/{{ product.illustration }}" alt="" class="photo-slider-img NOW">
+                    {% if product.illustration2 %}
+                    <img src="/media/{{ product.illustration2 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration3 %}
+                    <img src="/media/{{ product.illustration3 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration4 %}
+                    <img src="/media/{{ product.illustration4 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration5 %}
+                    <img src="/media/{{ product.illustration5 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration6 %}
+                    <img src="/media/{{ product.illustration6 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration7 %}
+                    <img src="/media/{{ product.illustration7 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration8 %}
+                    <img src="/media/{{ product.illustration8 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration9 %}
+                    <img src="/media/{{ product.illustration9 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                    {% if product.illustration10 %}
+                    <img src="/media/{{ product.illustration10 }}" alt="" class="photo-slider-img">
+                    {% endif %}
+                </div>
+                <div class="photo-pagination">
+                    <div class="photo-page active"><img src="/media/{{ product.illustration }}" alt=""></div>
+                    {% if product.illustration2 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration2 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration3 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration3 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration4 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration4 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration5 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration5 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration6 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration6 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration7 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration7 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration8 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration8 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration9 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration9 }}" alt=""></div>
+                    {% endif %}
+                    {% if product.illustration10 %}
+                    <div class="photo-page"><img src="/media/{{ product.illustration10 }}" alt=""></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="article-info-container">
+            <h1>{{ product.name }}</h1>
+            <h4>{{ product.subtitle }}</h4>
+            <div class="hr"></div>
+            {% if product.promo %}
+            <div class="promo">
+                <p id="promo">{{ (product.promo / 100)|number_format(2, ',', '.') }} €</p>
+                <p id="price">{{ (product.price / 100)|number_format(2, ',', '.') }} €</p>
+            </div>
+            <p id="tva">TVA incluse</p>
+            {% else %}
+            <p>{{ (product.price / 100)|number_format(2, ',', '.') }} €</p>
+            <p id="tva">TVA incluse</p>
+            {% endif %}
+            <div class="hr"></div>
+            <div class="desc">
+                <p>{{ product.description }}</p>
+            </div>
+            <div class="hr"></div>
+            <form class="sizes" method="post" enctype="multipart/form-data"
+                action="{#{{ path('add_to_cart', { 'id' : product.id, 'variant' : variant }) }}#}">
+                {% for size in sizes %}
+                <input type="radio" name="size" id="{{ size.id }}" value="{{ size.id }}" required {% if size.stock < 1
+                    %} disabled {% endif %}>
+                <label for="{{ size.id }}">{{ size.size }}</label>
+                {% endfor %}
+                <div class="btn-add"><span class="text">Ajouter au panier</span></div>
+                <div class="form-add-pic">
+                    <i class="fas fa-times btn-close"></i>
+                    <div class="form-input">
+                        <h3>Ma photo</h3>
+                        <div class="preview">
+                            <img id="file-ip-1-preview">
+                        </div>
+                        <p>Ajoutez la photo que vous souhaitez broder</p>
+                        <label id='label-add-to-cart' for="file-ip-1">Ajouter une photo</label>
+                        <input type="file" name="photo_client" id="file-ip-1" accept="image/*"
+                            onchange="showPreview(event);" required>
+                        <button type="submit" id="add-to-cart">Ajouter au panier</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="photo-container-zoom">
+        <i class="fas fa-times btn-exit"></i>
+        <div class="row">
+            <div class="photo-slider">
+                <img src="/media/{{ product.illustration }}" alt="" class="photo-slider-img-zoom NOW">
+                {% if product.illustration2 %}
+                <img src="/media/{{ product.illustration2 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration3 %}
+                <img src="/media/{{ product.illustration3 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration4 %}
+                <img src="/media/{{ product.illustration4 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration5 %}
+                <img src="/media/{{ product.illustration5 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration6 %}
+                <img src="/media/{{ product.illustration6 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration7 %}
+                <img src="/media/{{ product.illustration7 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration8 %}
+                <img src="/media/{{ product.illustration8 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration9 %}
+                <img src="/media/{{ product.illustration9 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+                {% if product.illustration10 %}
+                <img src="/media/{{ product.illustration10 }}" alt="" class="photo-slider-img-zoom">
+                {% endif %}
+            </div>
+            <div class="photo-pagination">
+                <div class="photo-page-zoom active"><img src="/media/{{ product.illustration }}" alt=""></div>
+                {% if product.illustration2 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration2 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration3 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration3 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration4 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration4 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration5 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration5 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration6 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration6 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration7 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration7 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration8 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration8 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration9 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration9 }}" alt=""></div>
+                {% endif %}
+                {% if product.illustration10 %}
+                <div class="photo-page-zoom"><img src="/media/{{ product.illustration10 }}" alt=""></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{{ asset('assets/js/app.js') }}"></script>
+{% endblock %}

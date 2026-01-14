@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos articles - Brod'Art{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/product.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container-articles">
+    <div class="grid-container-articles">
+        <div class="filter-container">
+            {{ form_start(formSearch) }}
+            <div class="row-filter">
+                {{ form_widget(formSearch.string) }}
+                <div class="btn-burger-filter">
+                    <span class="icon-bar-filter"></span>
+                    <span class="icon-bar-filter"></span>
+                    <span class="icon-bar-filter"></span>
+                </div>
+            </div>
+            <div class="collumn-filter">
+                {% if notCategory is defined %}<div style="display:none;">{% endif %}
+                    <label for="categories">Catégories</label>
+                    {{ form_widget(formSearch.categories) }}<br>
+                    {% if notCategory is defined %}
+                </div>{% endif %}
+                <label for="couleurs">Couleurs</label>
+                {{ form_widget(formSearch.couleurs) }}<br>
+                <label for="tailles">Tailles</label>
+                {{ form_widget(formSearch.tailles) }}<br>
+                <button type="submit"><span class="text">Filtrer</span></button>
+            </div>
+            {{ form_end(formSearch) }}
+        </div>
+        <div class="articles-container">
+            {% if products %}
+            {% for product in products %}
+            <div class="card">
+                <div class="card-header">
+                    <p>{{ product.name }}</p>
+                </div>
+                <div class="card-body">
+                    <a href="{{ path('product', { 'slug' : product.slug } ) }}"><img src="/media/{{ product.illustration }}" alt="{{ product.name }}"></a>
+                </div>
+                <div class="card-footer">
+                    {% if product.promo %}
+                    <p id="price">{{ (product.price / 100)|number_format(2, ',', '.') }} €</p>
+                    <p id="promo">{{ (product.promo / 100)|number_format(2, ',', '.') }} €</p>
+                    {% else %}
+                    <p>{{ (product.price / 100)|number_format(2, ',', '.') }} €</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h3>Aucun article trouvé...</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
