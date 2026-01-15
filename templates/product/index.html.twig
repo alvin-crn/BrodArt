@@ -40,7 +40,7 @@
                     <p>{{ product.name }}</p>
                 </div>
                 <div class="card-body">
-                    <a href="{{ path('product', { 'slug' : product.slug } ) }}"><img src="/media/{{ product.illustration }}" alt="{{ product.name }}"></a>
+                    <a href="{{ path('product', { 'slug' : product.slug } ) }}"><img src="/media/product/{{ product.illustration }}" alt="{{ product.name }}"></a>
                 </div>
                 <div class="card-footer">
                     {% if product.promo %}

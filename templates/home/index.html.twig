@@ -11,9 +11,9 @@
       <div class="carrousel-slider">
         {% for header in headers %}
         {% if loop.first %}
-        <img src="/uploads/{{ header.illustration }}" alt="" class="carrousel-slider-img NOW">
+        <img src="/media/carrousel/{{ header.illustration }}" alt="" class="carrousel-slider-img NOW">
         {% else %}
-        <img src="/uploads/{{ header.illustration }}" alt="" class="carrousel-slider-img">
+        <img src="/media/carrousel/{{ header.illustration }}" alt="" class="carrousel-slider-img">
         {% endif %}
         {% endfor %}
       </div>
@@ -33,7 +33,7 @@
         {% for product in bestseller %}
         <div class="card">
           <div class="pic">
-            <a href="{{ path('product', { 'slug' : product.slug } ) }}"><img src="/uploads/{{ product.illustration }}"
+            <a href="{{ path('product', { 'slug' : product.slug } ) }}"><img src="/media/product/{{ product.illustration }}"
                 alt="{{ product.subtitle }}"></a>
           </div>
           <div class="card-footer">
