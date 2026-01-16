@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier - Brod'Art{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/cart.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container-cart">
+        <div class="grid-container-cart">
+            <div class="grid-container-cart-article">
+                <div class="title-cart">
+                    <div>
+                        <h1>Mon panier</h1>
+                        <div class="circle-color"><strong><p id="number-article-cart">{{ cart|length }}</p></strong></div>
+                    </div>
+                    <a id="trash" href="{{ path('remove_cart') }}"><i class="fas fa-trash-alt"></i></a>
+                </div>
+                {% set totalArticle = null %}
+                {% set totalDeliveryCost = null %}
+                {% set totalCart = null %}
+                {% if cart|length %}
+                    {% for product in cart %}
+                        {% set quantity_plus = product.quantity + 1 %}
+                        {% set quantity_minus = product.quantity - 1 %}
+                        <div class="container-cart-article">
+                            <div class="photo-article">
+                                <img src="media/product/{{ product.product.illustration }}" alt="{{ product.product.name }}">
+                            </div>
+                            <div class="info-article-cart">
+                                <h1>{{ product.product.name }}</h1>
+                                <h4>{{ product.product.subtitle }}</h4>
+                                <div class="hr"></div>
+                                {% if product.product.promo %}
+                                    <div class="promo">
+                                        <p id="promo">{{ (product.product.promo / 100)|number_format(2, ',', '.') }} €</p>
+                                        <p id="old-price">{{ (product.product.price / 100)|number_format(2, ',', '.') }} €</p>
+                                    </div>
+                                        <p id="tva">TVA incluse</p>
+                                {% else %}
+                                    <p id="price">{{ (product.product.price / 100)|number_format(2, ',', '.') }} €</p>
+                                    <p id="tva">TVA incluse</p>
+                                {% endif %}
+                                <div class="hr"></div>
+                                <div class="select-option">
+                                    <p id="pic-brod">Votre photo à broder :</p>
+                                    <p>Taille séléctionnée : <strong>{{ product.size }}</strong></p>
+                                </div>
+                                <img src="{{ path('client_photo', { filename: product.photo_client }) }}" alt="votre photo : {{ product.photo_client }}">
+                            </div>
+                            <div class="btn">
+                                <a id="trash" href="{{ path('delete_to_cart', { 'variant' : product.variant }) }}"><i class="fas fa-trash-alt"></i></a>
+                                <p id="quantity">
+                                    <a href="{{ path('add_to_cart', { 'id' : product.product.id, 'variant' : product.variant }) }}?photo={{ product.photo_client }}&size={{ product.size }}&id_size={{ product.id_size }}&quantity={{ quantity_minus }}"><i class="fas fa-minus"></i></a>
+                                    {{ product.quantity }} 
+                                    <a href="{{ path('add_to_cart', { 'id' : product.product.id, 'variant' : product.variant }) }}?photo={{ product.photo_client }}&size={{ product.size }}&id_size={{ product.id_size }}&quantity={{ quantity_plus }}"><i class="fas fa-plus"></i></a>
+                                </p>
+                                {% if product.product.promo %}
+                                    <p>{{ ((product.product.promo * product.quantity) / 100)|number_format(2, ',', '.') }} €</p>
+                                {% else %}
+                                    <p>{{ ((product.product.price * product.quantity) / 100)|number_format(2, ',', '.') }} €</p>
+                                {% endif %}
+                                <p>Frais de port : {{ ((product.product.deliveryCost * product.quantity) / 100)|number_format(2, ',', '.') }} €</p>
+                            </div>
+                        </div>
+                        {% if product.product.promo %}
+                            {% set totalArticle = totalArticle + (product.product.promo * product.quantity) %}
+                        {% else %}
+                            {% set totalArticle = totalArticle + (product.product.price * product.quantity) %}
+                        {% endif %}
+
+                        {% set totalDeliveryCost = totalDeliveryCost + (product.product.deliveryCost * product.quantity) %}
+
+                        {% set totalCart = (totalDeliveryCost + totalArticle) %}
+                    {% endfor %}
+                {% else %}
+                    <h1 id="cart_empty">Votre panier est vide.</h1>
+                {% endif %}
+            </div>
+            <div class="collumn-container-summary">
+                <div class="container-summary">
+                    <h1>Résumé de la commande</h1>
+                    <div class="summary">
+                        <div class="row"><p>Total des articles :</p><p><strong>{{ (totalArticle / 100)|number_format(2, ',', '.') }} €</strong></p></div>
+                        <div class="row"><p>Total des frais de port :</p><p><strong>{{ (totalDeliveryCost / 100)|number_format(2, ',', '.') }} €</strong></p></div>
+                        <div class="row"><p>Total du panier :</p><p><strong>{{ (totalCart / 100)|number_format(2, ',', '.') }} €</strong></p></div>
+                    </div>
+                    <a href="{#{{ path('order') }}#}"><button><span>Valider mon panier</span></button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-container-summary">
+        <p>Total :</p>
+        <p><strong>{{ (totalCart / 100)|number_format(2, ',', '.') }} €</strong></p>
+        <a href="{#{{ path('order') }}#}"><button><span>Valider</span></button></a>
+    </div>
+{% endblock %}

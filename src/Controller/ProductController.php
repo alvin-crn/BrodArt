@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Service\SearchService;
 use DateTimeImmutable;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Form\SearchType;
+use App\Service\SearchService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

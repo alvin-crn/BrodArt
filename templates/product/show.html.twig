@@ -92,7 +92,7 @@
             </div>
             <div class="hr"></div>
             <form class="sizes" method="post" enctype="multipart/form-data"
-                action="{#{{ path('add_to_cart', { 'id' : product.id, 'variant' : variant }) }}#}">
+                action="{{ path('add_to_cart', { 'id' : product.id, 'variant' : variant }) }}">
                 {% for size in sizes %}
                 <input type="radio" name="size" id="{{ size.id }}" value="{{ size.id }}" required {% if size.stock < 1
                     %} disabled {% endif %}>
@@ -108,7 +108,7 @@
                         </div>
                         <p>Ajoutez la photo que vous souhaitez broder</p>
                         <label id='label-add-to-cart' for="file-ip-1">Ajouter une photo</label>
-                        <input type="file" name="photo_client" id="file-ip-1" accept="image/*"
+                        <input type="file" name="photo_client" id="file-ip-1" accept="image/*" max="10485760"
                             onchange="showPreview(event);" required>
                         <button type="submit" id="add-to-cart">Ajouter au panier</button>
                     </div>
