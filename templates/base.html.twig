@@ -73,17 +73,8 @@
           <li><a href="{{ path('best_sale') }}">Meilleures ventes</a></li>
           <li><a href="{{ path('new_product') }}">Nouveautés</a></li>
           <li id="title-2">Catégories</li>
-          <li><a href="{{ path('products') }}">Tous les articles</a></li>
-          <li><a href="/categorie/T-shirt">T-shirt</a></li>
-          <li><a href="/categorie/Sweat">Sweat & Pullover</a></li>
-          <li><a href="/categorie/Short">Short</a></li>
-          <li><a href="/categorie/Pantalon">Pantalon</a></li>
-          <li><a href="/categorie/Chaussette">Chaussette</a></li>
-          <li><a href="/categorie/Casquette">Casquette</a></li>
-          <li><a href="/categorie/Bonnet">Bonnet</a></li>
-          <li><a href="/categorie/Echarpe">Echarpe</a></li>
-          <li><a href="/categorie/Gant">Gant</a></li>
-          <li><a href="/categorie/Accessoire">Accessoire</a></li>
+          <li id="all-products"><a href="{{ path('products') }}">Tous les articles</a></li>
+          {# Autre catégorie en Jquery ici #}
           <li id="title-2">Aide et paramètres</li>
           <li><a href="#">Contactez-nous</a></li>
           <li><a href="#">Qui sommes-nous ?</a></li>
@@ -118,6 +109,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>
   <script src="{{ asset('js/app.js') }}"></script>
+  <script src="{{ asset('js/menu-burger.js') }}"></script>
   {% block script %}{% endblock %}
 </body>
 

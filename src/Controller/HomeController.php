@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Header;
 use App\Entity\Product;
+use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
@@ -18,7 +19,7 @@ class HomeController extends AbstractController
     {
         $this->em = $em;
     }
-    
+
     #[Route('/', name: 'home')]
     public function index(): Response
     {
@@ -40,5 +41,22 @@ class HomeController extends AbstractController
             'bestseller' => $bestProducts,
             'categories' => $categories,
         ]);
+    }
+
+    #[Route('/ajax/categories', name: 'ajax_categories', methods: ['GET'])]
+    public function ajaxCategories(): JsonResponse
+    {
+        $categories = $this->em->getRepository(Category::class)->findBy([], ['name' => 'ASC']);
+
+        $data = [];
+
+        foreach ($categories as $category) {
+            $data[] = [
+                'name' => $category->getName(),
+                'slug' => $category->getSlug(),
+            ];
+        }
+
+        return new JsonResponse($data);
     }
 }

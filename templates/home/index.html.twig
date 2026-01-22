@@ -70,7 +70,7 @@
       <div class="grid-container">
         {% for categorie in categories %}
         <div class="category-container">
-          <a href="{{ path('product_by_category', { 'category' : categorie.name } ) }}">
+          <a href="{{ path('product_by_category', { 'slug' : categorie.slug } ) }}">
             <button>
               <span class="label">{{ categorie.name }}</span>
               <span class="icon">

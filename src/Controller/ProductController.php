@@ -135,10 +135,10 @@ class ProductController extends AbstractController
         ]);
     } 
 
-    #[Route('/categorie/{category}', name: 'product_by_category')]
-    public function categorie($category, Request $request): Response
+    #[Route('/categorie/{slug}', name: 'product_by_category')]
+    public function categorie($slug, Request $request): Response
     {
-        $categorie = $this->em->getRepository(Category::class)->findOneByName($category);
+        $categorie = $this->em->getRepository(Category::class)->findOneBySlug($slug);
 
         if(!$categorie) {
             return $this->redirectToRoute('products');
