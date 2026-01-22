@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de ma commande - Brod'Art{% endblock %}
+
+{% block body %}
+    <div class="container-order-success">
+        <div class="box-container-order-success">
+        <h2>Confirmation de votre commande n°<strong>{{ order.reference }}</strong></h2>
+        <p>Merci pour votre commande {{ order.user.firstname }} !</p>
+        <p>Un mail de confirmation vous a été envoyé à l'adresse <strong>{{ order.user.email }}</strong>.</p>
+        <p>Votre commande vous sera livrée à l'adresse suivante : <br>
+        <i>{{ order.delivery|raw }}</i>
+        </p>
+        <p>Vous pouvez suivre à tout moment votre commande sur votre <a href="{{ path('account_orders') }}">compte</a></p>
+        </div>
+    </div>
+{% endblock %}

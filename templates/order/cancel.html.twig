@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur de paiement - Brod'Art{% endblock %}
+
+{% block body %}
+    <div class="container-order-success">
+        <div class="box-container-order-success">
+        <h2>Erreur de paiement pour votre commande n°<strong>{{ order.reference }}</strong></h2>
+        <p>Bonjour {{ order.user.firstname }}, <br>
+        il semblerait que votre paiement est échoué...</p>
+        <p>Vous pouvez <a href="">réessayer le paiment</a> ici</p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Récapitulatif de ma commande - Brod'Art{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ asset('css/order.css') }}">{% endblock css %}
+
+{% block body %}
+<div class="container-order">
+    <div class="flex-container-order">
+        <h1>Récapitulatif de la commande</h1>
+        <div class="grid-container-order recap">
+            <div class="grid-left">
+                <h3>Adresse de livraison</h3>
+                <div class="border">
+                    {{ order.delivery|raw }}
+                </div>
+                <h3>Frais de livraison</h3>
+                <div class="border">
+                    <p>Pour {{ quantity }} article(s) : {{ (order.carrierPrice / 100)|number_format(2, ',', '.') }} €</p>
+                </div>
+                {% if order.comment %}
+                <h3>Votre commentaire</h3>
+                <div class="border">
+                    <p>{{ order.comment }}</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="grid-right">
+                <h3>Resumé de la commande</h3>
+                {% set total = null %}
+                {% for row in order.orderDetails %}
+                    <div class="products-order">
+                        <div class="products">
+                            <img src="{{ asset('media/product/' ~ row.productSize.product.illustration) }}" alt="{{ row.productSize.product.name }}">
+                            <p>{{ row.product }}</p>
+                            <p>x {{ row.quantity }}</p>
+                            {% if row.productSize.product.promo %}
+                            <p>{{ ((row.productSize.product.promo * row.quantity) / 100)|number_format(2, ',', '.') }} €</p>
+                            {% else %}
+                            <p>{{ ((row.productSize.product.price * row.quantity) / 100)|number_format(2, ',', '.') }} €</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if row.productSize.product.promo %}
+                        {% set total = total + (row.productSize.product.promo * row.quantity) %}
+                    {% else %}
+                        {% set total = total + (row.productSize.product.price * row.quantity) %}
+                    {% endif %}
+                {% endfor %}
+                <div class="resume">
+                    <p>Total + frais de livraison : {{ ((total + order.carrierPrice) / 100)|number_format(2, ',', '.') }} €</p>
+                    <a href="{{ path('order_payment', { ref: order.reference }) }}" id="checkout-button"><button><span>Payer</span></button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

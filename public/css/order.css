@@ -1,0 +1,461 @@
+/* ************** * COMMANDE ADRESSE * ************** */
+
+.container-order {
+    height: 100%;
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.container-order .grid-container-order {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr;
+
+    max-width: 1200px;
+    width: 90%;
+
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.container-order .grid-container-order h1 {
+    font-size: 2em;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+.container-order .grid-container-order .grid-left {
+    padding-left: 10px;
+}
+
+.container-order .grid-container-order .grid-left form #order div label:first-child {
+    font-size: 1.2em;
+}
+
+.container-order .grid-container-order .grid-left form #order div #order_addresses {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr;
+    column-gap: 10px;
+    row-gap: 15px;
+    align-items: center;
+    margin: 10px;
+}
+
+.container-order .grid-container-order .grid-left form #order div #order_addresses label {
+    font-weight: bold;
+}
+
+.container-order .grid-container-order .grid-left form > p {
+    margin-bottom: 10px;
+}
+
+.container-order .grid-container-order .grid-left form textarea {
+    font-family: "Encode Sans Condensed", sans-serif;
+}
+
+.container-order .grid-container-order .grid-left form button#valid {
+    margin-top: 20px;
+}
+
+.container-order .grid-container-order .grid-left form button {
+    width: 80%;
+    align-items: center;
+    background-image: linear-gradient(180deg, rgb(247, 110, 26), #c0293b);
+    border: 0;
+    border-radius: 10px;
+    color: #ffffff;
+    display: flex;
+    font-size: 1.1em;
+    justify-content: center;
+    padding: 3px;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+}
+
+.container-order .grid-container-order .grid-left form button:active,
+.container-order .grid-container-order .grid-left form button:hover {
+    outline: 0;
+}
+
+.container-order .grid-container-order .grid-left form button span {
+    background: none;
+    padding: 5px;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    font-family: "Encode Sans Condensed", sans-serif;
+    transition: 300ms;
+}
+
+.container-order .grid-container-order .grid-left form button:hover span {
+    background-color: rgb(255, 255, 255);
+    color: #8b8b8b;
+}
+
+.container-order .grid-container-order .grid-left form button:active {
+    transform: scale(0.9);
+}
+
+.container-order .grid-container-order .grid-right .product-order {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+.container-order .grid-container-order .grid-right .product-order h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.container-order .grid-container-order .grid-right .product-order .product {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-order .grid-container-order .grid-right .product-order .product p {
+    font-size: 1.1em;
+    padding: 15px;
+}
+
+.container-order .grid-container-order .grid-right .product-order .product .pics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 10px;
+    row-gap: 5px;
+    grid-auto-flow: column;
+}
+
+.container-order .grid-container-order .grid-right .product-order .product .pics img {
+    height: 125px;
+    width: 125px;
+    border-radius: 10px;
+}
+
+/* ************** * COMMANDE RECAP * ************** */
+
+.container-order .flex-container-order {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    width: 90%;
+}
+
+.container-order .flex-container-order > h1 {
+    font-size: 2em;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.container-order .grid-container-order.recap {
+    width: 100%;
+}
+
+.container-order .grid-container-order .grid-left .border {
+    text-align: center;
+    border: solid 1px #8b8b8b;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px 30px 10px 0;
+}
+
+.container-order .grid-container-order .grid-right .products-order {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: solid 1px #8b8b8b;
+}
+
+.container-order .grid-container-order .grid-right .products-order .products {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-order .grid-container-order .grid-right .products-order .products p {
+    font-size: 1.1em;
+    padding: 15px;
+}
+
+.container-order .grid-container-order .grid-right .products-order .products img {
+    height: 100px;
+    width: 100px;
+    border-radius: 5px;
+}
+
+.container-order .grid-container-order .grid-right .resume {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: solid 1px #8b8b8b;
+}
+
+.container-order .grid-container-order .grid-right .resume p {
+    font-size: 1.1em;
+}
+
+.container-order .grid-container-order .grid-right .resume a {
+    width: 25%;
+}
+
+.container-order .grid-container-order .grid-right .resume button {
+    width: 100%;
+    align-items: center;
+    background-image: linear-gradient(180deg, rgb(247, 110, 26), rgb(192, 41, 59));
+    border: 0;
+    border-radius: 10px;
+    color: #ffffff;
+    display: flex;
+    font-size: 1.1em;
+    justify-content: center;
+    padding: 3px;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.container-order .grid-container-order .grid-right .resume button:active,
+.container-order .grid-container-order .grid-right .resume button:hover {
+    outline: 0;
+}
+
+.container-order .grid-container-order .grid-right .resume button span {
+    background: none;
+    padding: 5px;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    font-family: "Encode Sans Condensed", sans-serif;
+    transition: 300ms;
+}
+
+.container-order .grid-container-order .grid-right .resume button:hover span {
+    background-color: rgb(255, 255, 255);
+    color: #8b8b8b;
+}
+
+.container-order .grid-container-order .grid-right .resume button:active {
+    transform: scale(0.9);
+}
+
+/* ************** * COMMANDE SUCCESS * ************** */
+
+.container-order-success {
+    height: 100%;
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.container-order-success .box-container-order-success {
+    max-width: 1200px;
+    width: 90%;
+
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.container-order-success .box-container-order-success h2 {
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.container-order-success .box-container-order-success p {
+    margin-bottom: 10px;
+}
+
+.container-order-success .box-container-order-success p a {
+    color: #616161;
+}
+
+/* ************** * COMMANDE PAIEMENT * ************** */
+
+/* Container principal */
+.checkout-container {
+    display: flex;
+    min-height: 100vh;
+    gap: 2rem;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+/* Colonne gauche : récap */
+.order-summary {
+    flex: 1;
+    background-color: #f8f8f8;
+    padding: 1.5rem;
+    border-radius: 10px;
+    overflow-y: auto;
+}
+
+.order-summary h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.order-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.item-photo {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 1rem;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-info p {
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+}
+
+.item-total {
+    font-weight: bold;
+}
+
+/* Totaux */
+.order-totals {
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+.order-totals .total {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Colonne droite : formulaire paiement */
+.payment-form {
+    flex: 1;
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    width: 100%;
+}
+
+.payment-form h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.payment-form label {
+    display: block;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+}
+
+.payment-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.2rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.payment-form .row {
+    display: flex;
+    gap: 16px;
+}
+
+.payment-form .row > div {
+    flex: 1;
+}
+
+.form-cgv {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.form-cgv input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.form-cgv label {
+    margin: 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.flex-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.flex-col {
+    flex: 1;
+}
+
+.btn-pay {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #ff4d4d;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-pay:hover {
+    background-color: #e60000;
+}
+
+.valid-payment-info {
+  margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .checkout-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

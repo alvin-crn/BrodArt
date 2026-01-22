@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Paiement de votre commande {{ order.reference }} - Brod'Art{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/order.css') }}">
+    <script src="https://kit.fontawesome.com/6f4e25e570.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="checkout-container">
+        <!-- Colonne gauche : récap de la commande -->
+        <div class="order-summary">
+            <h2>Récapitulatif de votre commande n°{{ order.reference }}</h2>
+            {% set articlesTotal = 0 %}
+            <ul class="order-items">
+                {% for detail in order.orderDetails %}
+                {% set articlesTotal = articlesTotal + detail.total %}
+
+                <li class="order-item">
+                    <img src="{{ asset('media/product/' ~ detail.productSize.product.illustration) }}" alt="{{ detail.productSize.product.name }}" class="item-photo">
+                    <img src="{{ path('unvalided_order_client_photo', { filename: detail.photoClient }) }}" alt="Photo personnalisée" class="item-photo">
+                    <div class="item-info">
+                        <p class="item-name">{{ detail.product }}</p>
+                        <p class="item-size">Taille : {{ detail.size }}</p>
+                        <p class="item-quantity">Quantité : {{ detail.quantity }}</p>
+                    </div>
+
+                    <p class="item-total">
+                        {{ (detail.total / 100)|number_format(2, ',', '.') }} €
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <div class="order-totals">
+                <p>Sous-total articles : {{ (articlesTotal / 100)|number_format(2, ',', ' ') }} €</p>
+                <p>Frais de port : {{ (order.carrierPrice / 100)|number_format(2, ',', ' ') }} €</p>
+
+                {% set totalCommande = articlesTotal + order.carrierPrice %}
+
+                <p class="total">
+                    Total : {{ (totalCommande / 100)|number_format(2, ',', ' ') }} €
+                </p>
+            </div>
+        </div>
+
+        <!-- Colonne droite : formulaire de paiement -->
+        <div class="payment-form">
+            {{ form_start(form) }}
+
+            <h2>Paiement sécurisé</h2>
+
+            {{ form_row(form.card_name) }}
+            {{ form_row(form.card_number) }}
+
+            <div class="row">
+                {{ form_row(form.card_expiry) }}
+                {{ form_row(form.card_cvc) }}
+            </div>
+
+            {{ form_row(form.accept_cgv) }}
+
+            <button class="btn-pay">
+                Payer {{ (totalCommande / 100)|number_format(2, ',', ' ') }} €
+            </button>
+
+            {{ form_end(form) }}
+
+            <p class="valid-payment-info">Pour simuler une commande validé, veuillez entrer 1234 5678 9012 3456, 02/29, 123</p>
+        </div>
+    </div>
+</body>
+
+</html>

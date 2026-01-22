@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choisir mon adresse de livraison - Brod'Art{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ asset('css/order.css') }}">{% endblock css %}
+
+{% block body %}
+<div class="container-order">
+    <div class="grid-container-order">
+        <div class="grid-left">
+            <h1>Adresse</h1>
+            {% set formHtml %}
+                {{ form_start(form, {action:path('order_recap')}) }}
+                    {% if app.user.addresses.getValues != [] %}
+                        {{ form_widget(form) }}
+                    {% else %}
+                        {{ form_widget(form) }}
+                         <a href="{{ path('account_address_add') }}"><button type="button"><span>Ajouter une adresse de livraison</span></button></a>
+                    {% endif %}
+            <h1>Transport</h1>
+                {% set totalDeliveryCost = null %}
+                {% for products in cart %}
+                    {% set totalDeliveryCost = totalDeliveryCost + (products.product.deliveryCost * products.quantity) %}
+                {% endfor %}
+                <p>Total des frais de port : <strong>{{ (totalDeliveryCost / 100)|number_format(2, ',', '.') }} €</strong></p>
+                <form action="{{ path('order_recap') }}" method="post">
+                    <input type="hidden" name="carrier" id="carrier" value="{{ totalDeliveryCost }}">
+                    <h1>Commentaire</h1>
+                    <textarea name="comment" id="comment" cols="35" rows="5"
+                        placeholder="Laissez-nous un commentaire pour toute remarque ou spécification dans votre commande"></textarea>
+                    {% if app.user.addresses.getValues != [] %}
+                        <button type="submit" id="valid"><span>Valider</span></button>
+                    {% endif %}
+                </form>
+                {{ form_end(form) }}
+                {% endset %}
+            {{ formHtml|replace({'[br]' : '<br />'})|raw }}
+        </div>
+        <div class="grid-right">
+            <h1>Resumé de la commande</h1>
+            {% for product in cart %}
+            <div class="product-order">
+                <h3>{{ product.product.name }}</h3>
+                <div class="product">
+                    <div class="pics">
+                        <p>Article :</p>
+                        <img src="media/product/{{ product.product.illustration }}" alt="">
+                        <p>Votre photo :</p>
+                        <img src="{{ path('client_photo', { filename: product.photo_client }) }}" alt="votre photo : {{ product.photo_client }}">
+                    </div>
+                    {% if product.product.promo %}
+                    <p>{{ ((product.product.promo * product.quantity) / 100)|number_format(2, ',', '.') }} €</p>
+                    {% else %}
+                    <p>{{ ((product.product.price * product.quantity) / 100)|number_format(2, ',', '.') }} €</p>
+                    {% endif %}
+                    <p>x {{ product.quantity }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

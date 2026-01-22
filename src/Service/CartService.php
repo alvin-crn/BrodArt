@@ -61,6 +61,10 @@ class CartService extends AbstractController
         return $this->session->remove('cart');
     }
 
+    public function removeCart()
+    {
+        return $this->session->remove('cart');
+    }
 
     public function delete($variant)
     {

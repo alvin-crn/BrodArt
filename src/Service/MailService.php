@@ -35,7 +35,5 @@ class MailService
     ];
 
     $response = $this->mj->post(Resources::$Email, ['body' => $body]);
-
-    $response->success() && var_dump($response->getData());
   }
 }

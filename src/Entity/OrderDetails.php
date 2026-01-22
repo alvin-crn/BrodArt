@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderDetailsRepository;
+use App\Entity\ProductSize;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OrderDetailsRepository;
 
 #[ORM\Entity(repositoryClass: OrderDetailsRepository::class)]
 class OrderDetails
@@ -35,15 +36,13 @@ class OrderDetails
     #[ORM\Column(type: 'string', length: 255)]
     private $photoClient;
 
-    #[ORM\Column(type: 'integer')]
-    private $idSizeStock;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private $nameFile;
+    #[ORM\ManyToOne(targetEntity: ProductSize::class)]
+    #[ORM\JoinColumn(name: 'id_size_stock', referencedColumnName: 'id', nullable: false)]
+    private ?ProductSize $productSize = null;
 
     public function __toString()
     {
-        return $this->getQuantity().' x '.$this->getProduct().' en taille '.$this->getSize().' avec la photo '.$this->getPhotoClient().' (à '.number_format(($this->getPrice() / 100), 2, ',', ',').'€ l\'unité)';
+        return $this->getQuantity() . ' x ' . $this->getProduct() . ' en taille ' . $this->getSize() . ' avec la photo ' . $this->getPhotoClient() . ' (à ' . number_format(($this->getPrice() / 100), 2, ',', ',') . '€ l\'unité)';
     }
 
     public function getId(): ?int
@@ -135,27 +134,14 @@ class OrderDetails
         return $this;
     }
 
-    public function getIdSizeStock(): ?int
+    public function getProductSize(): ?ProductSize
     {
-        return $this->idSizeStock;
+        return $this->productSize;
     }
 
-    public function setIdSizeStock(int $idSizeStock): self
+    public function setProductSize(ProductSize $productSize): self
     {
-        $this->idSizeStock = $idSizeStock;
-
-        return $this;
-    }
-
-    public function getNameFile(): ?string
-    {
-        return $this->nameFile;
-    }
-
-    public function setNameFile(string $nameFile): self
-    {
-        $this->nameFile = $nameFile;
-
+        $this->productSize = $productSize;
         return $this;
     }
 }

@@ -85,7 +85,7 @@
                         <div class="row"><p>Total des frais de port :</p><p><strong>{{ (totalDeliveryCost / 100)|number_format(2, ',', '.') }} €</strong></p></div>
                         <div class="row"><p>Total du panier :</p><p><strong>{{ (totalCart / 100)|number_format(2, ',', '.') }} €</strong></p></div>
                     </div>
-                    <a href="{#{{ path('order') }}#}"><button><span>Valider mon panier</span></button></a>
+                    <a href="{{ path('order') }}"><button><span>Valider mon panier</span></button></a>
                 </div>
             </div>
         </div>
@@ -93,6 +93,6 @@
     <div class="mobile-container-summary">
         <p>Total :</p>
         <p><strong>{{ (totalCart / 100)|number_format(2, ',', '.') }} €</strong></p>
-        <a href="{#{{ path('order') }}#}"><button><span>Valider</span></button></a>
+        <a href="{{ path('order') }}"><button><span>Valider</span></button></a>
     </div>
 {% endblock %}

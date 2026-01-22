@@ -8,16 +8,29 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PersonalizedPicService
 {
-    private string $uploadDir;
+    private string $uploadCartPhotoDir;
+    private string $uploadUnvalidedOrderPhotoDir;
 
-    public function __construct(string $uploadClientPhotoDir)
+    public function __construct(string $uploadClientPhotoDir, string $uploadUnvalidedOrderPhotoDir)
     {
-        $this->uploadDir = rtrim($uploadClientPhotoDir, '/');
+        $this->uploadCartPhotoDir = rtrim($uploadClientPhotoDir, '/');
+        $this->uploadUnvalidedOrderPhotoDir = rtrim($uploadUnvalidedOrderPhotoDir, '/');
     }
 
     public function getPersonalizedPic(string $filename): BinaryFileResponse
     {
-        $path = $this->uploadDir . '/' . $filename;
+        $path = $this->uploadCartPhotoDir . '/' . $filename;
+
+        if (!file_exists($path)) {
+          throw new NotFoundHttpException('Image introuvable');
+        }
+
+        return new BinaryFileResponse($path, 200, [], false, ResponseHeaderBag::DISPOSITION_INLINE);
+    }
+
+    public function getUnvalidedOrderPhoto(string $filename): BinaryFileResponse
+    {
+        $path = $this->uploadUnvalidedOrderPhotoDir . '/' . $filename;
 
         if (!file_exists($path)) {
           throw new NotFoundHttpException('Image introuvable');
