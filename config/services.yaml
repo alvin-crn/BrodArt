@@ -23,3 +23,4 @@ services:
         arguments:
             $uploadClientPhotoDir: '%UPLOAD_CLIENT_PHOTO_DIR%'
             $uploadUnvalidedOrderPhotoDir: '%UPLOAD_UNVALIDED_ORDER_PHOTO_DIR%'
+            $uploadValidedOrderPhotoDir: '%UPLOAD_VALIDED_ORDER_PHOTO_DIR%'

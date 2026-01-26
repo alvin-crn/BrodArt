@@ -264,11 +264,6 @@
   .container-cart .grid-container-cart .collumn-container-summary .container-summary .total p {
     font-size: 1.2em;
   }
-
-  .container-cart .grid-container-cart .collumn-container-summary .container-summary button {
-    width: 35%;
-    margin-left: 65%;
-  }
 }
 
 @media screen and (max-width: 440px) {

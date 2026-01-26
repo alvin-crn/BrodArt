@@ -32,9 +32,18 @@
             <a href="{{ path('app_login') }}"><i class="fas fa-user-circle mobile"></i></a>
             {% endif %}
           </li>
-          <li>
-            <a href="{{ path('cart') }}" class="link-nav">Panier</a>
-            <a href="{{ path('cart') }}"><i class="fas fa-shopping-basket"></i></a>
+          <li class="nav-cart">
+            <!-- Desktop -->
+            <a href="{{ path('cart') }}" class="link-nav cart-desktop">
+              Panier
+              <span class="cart-count cart-count-desktop"></span>
+            </a>
+
+            <!-- Mobile -->
+            <a href="{{ path('cart') }}" class="cart-icon cart-mobile">
+              <i class="fas fa-shopping-basket"></i>
+              <span class="cart-count cart-count-mobile"></span>
+            </a>
           </li>
         </ul>
       </nav>
@@ -110,6 +119,7 @@
     crossorigin="anonymous"></script>
   <script src="{{ asset('js/app.js') }}"></script>
   <script src="{{ asset('js/menu-burger.js') }}"></script>
+  <script src="{{ asset('js/cart.js') }}"></script>
   {% block script %}{% endblock %}
 </body>
 

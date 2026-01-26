@@ -226,8 +226,14 @@ class OrderController extends AbstractController
     }
 
     #[Route('/unvalided-order-client-photo/{filename}', name: 'unvalided_order_client_photo')]
-    public function clientPhoto(string $filename, PersonalizedPicService $personalizedPicService): BinaryFileResponse
+    public function unvalidedOrderClientPhoto(string $filename, PersonalizedPicService $personalizedPicService): BinaryFileResponse
     {
         return $personalizedPicService->getUnvalidedOrderPhoto($filename);
+    }
+
+    #[Route('/valided-order-client-photo/{filename}', name: 'valided_order_client_photo')]
+    public function validedOrderClientPhoto(string $filename, PersonalizedPicService $personalizedPicService): BinaryFileResponse
+    {
+        return $personalizedPicService->getValidedOrderPhoto($filename);
     }
 }

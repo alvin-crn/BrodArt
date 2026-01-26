@@ -29,7 +29,7 @@
             <tbody>
                 {% for product in order.orderDetails %}
                 <tr>
-                    <td><img src="{{ product.photoClient }}" alt=""></td>
+                    <td><img src="{{ path('valided_order_client_photo', { filename: product.photoClient }) }}" alt="votre photo : {{ product.photoClient }}"></td>
                     <td>{{ product.product }}</td>
                     <td>{{ product.size }}</td>
                     <td>{{ product.quantity }}</td>

@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -87,8 +88,23 @@ class CartController extends AbstractController
     }
 
     #[Route('/client-photo/{filename}', name: 'client_photo')]
-    public function clientPhoto(string $filename, PersonalizedPicService $personalizedPicService ): BinaryFileResponse 
+    public function clientPhoto(string $filename, PersonalizedPicService $personalizedPicService): BinaryFileResponse
     {
         return $personalizedPicService->getPersonalizedPic($filename);
+    }
+
+    #[Route('/ajax/cart/count', name: 'ajax_cart_count', methods: ['GET'])]
+    public function cartCount(Request $request): JsonResponse
+    {
+        $cart = $request->getSession()->get('cart', []);
+
+        $count = 0;
+        foreach ($cart as $item) {
+            $count += $item['quantity'] ?? 1;
+        }
+
+        return new JsonResponse([
+            'count' => $count
+        ]);
     }
 }
