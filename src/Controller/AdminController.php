@@ -28,4 +28,14 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/utilisateur', name: 'user')]
+    public function user(): Response
+    {
+        $users = $this->em->getRepository(User::class)->findAll();
+
+        return $this->render('admin/user.html.twig', [
+            'users' => $users,
+            'active' => 'user',
+        ]);
+    }
 }

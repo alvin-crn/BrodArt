@@ -1,0 +1,89 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration utilisateur - Brod'Art{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/user.css') }}">
+{% endblock css %}
+
+{% block admin_content %}
+<div class="user-filters">
+    <div class="filters-left">
+        <label>
+            <input type="checkbox" id="filter-admin">
+            Administrateurs
+        </label>
+
+        <label>
+            <input type="checkbox" id="filter-blocked">
+            Comptes bloqués
+        </label>
+
+        <label>
+            <input type="checkbox" id="filter-blacklist">
+            Comptes blacklistés
+        </label>
+    </div>
+
+    <div class="filters-right">
+        <input type="text" id="user-search" placeholder="Rechercher un utilisateur..." />
+    </div>
+</div>
+
+<div class="table-wrapper">
+    <table class="admin-table" id="users-table">
+        <thead>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>E-mail</th>
+                <th>Rôle</th>
+                <th>Statut</th>
+                <th>Blacklistage</th>
+                <th class="center"><i class="fa-solid fa-circle-info"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr data-email="{{ user.email|lower }}" data-firstname="{{ user.firstname|lower }}"
+                data-lastname="{{ user.lastname|lower }}" data-admin="{{ 'ROLE_ADMIN' in user.roles ? '1' : '0' }}"
+                data-desactived="{{ user.desactived ? '1' : '0' }}" data-blacklist="{{ user.blacklist ? '1' : '0' }}">
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if 'ROLE_ADMIN' in user.roles %}
+                    <span class="badge badge-admin">Admin</span>
+                    {% else %}
+                    <span class="badge badge-user">Utilisateur</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user.desactived %}
+                    <span class="badge badge-blocked">Désactivé</span>
+                    {% else %}
+                    <span class="badge badge-active">Actif</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user.blacklist %}
+                    <span class="badge badge-blocked">Oui</span>
+                    {% else %}
+                    <span class="badge badge-active">Non</span>
+                    {% endif %}
+                </td>
+                <td class="center">
+                    <a href="" class="btn-action">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% block script %}
+<script src="{{ asset('js/admin/user.js') }}"></script>
+{% endblock script %}
+
+{% endblock %}
