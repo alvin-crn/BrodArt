@@ -1,0 +1,43 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier taille{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/show-entity.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-show">
+
+  <h1>Modifier la taille</h1>
+
+  {% for message in app.flashes('success') %}
+  <div class="alert alert-success">
+    {{ message }}
+  </div>
+  {% endfor %}
+
+  <div class="form-card">
+    {{ form_start(form) }}
+
+    <div class="form-group">
+      {{ form_label(form.size) }}
+      {{ form_widget(form.size) }}
+      {{ form_errors(form.size) }}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <span class="text">Enregistrer</span>
+      </button>
+
+      <a href="{{ path('admin_sizes') }}" class="btn btn-secondary">
+        Retour
+      </a>
+    </div>
+
+    {{ form_end(form) }}
+  </div>
+
+</div>
+{% endblock %}

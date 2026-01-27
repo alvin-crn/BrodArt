@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Size;
 use App\Entity\User;
+use App\Form\SizeType;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,7 +63,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/user/{id}/update', name: 'user_update', methods: ['POST'])]
-    public function updateUser(User $user, Request $request, EntityManagerInterface $em): Response
+    public function updateUser(User $user, Request $request): Response
     {
         // Prénom / Nom / Email
         $user->setFirstname($request->request->get('firstname'));
@@ -83,7 +85,7 @@ final class AdminController extends AbstractController
         $user->setDesactived($request->request->has('desactived'));
         $user->setBlacklist($request->request->has('blacklist'));
 
-        $em->flush();
+        $this->em->flush();
 
         // Notification de succès
         $this->addFlash('success', 'Utilisateur mis à jour avec succès !');
@@ -94,9 +96,9 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/catégories', name: 'categories')]
-    public function categories(EntityManagerInterface $em)
+    public function categories()
     {
-        $categories = $em->getRepository(Category::class)->findAll();
+        $categories = $this->em->getRepository(Category::class)->findAll();
 
         return $this->render('admin/category.html.twig', [
             'categories' => $categories,
@@ -130,7 +132,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('catégorie/{slug}', name: 'category_show')]
-    public function showCategory($slug, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
+    public function showCategory($slug, Request $request, SluggerInterface $slugger): Response
     {
         $category = $this->em->getRepository(Category::class)->findOneBy(['slug' => $slug]);
 
@@ -145,7 +147,7 @@ final class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $slug = $slugger->slug($category->getName())->lower();
             $category->setSlug($slug);
-            $em->flush();
+            $this->em->flush();
 
             $this->addFlash('success', 'Catégorie mise à jour avec succès.');
 
@@ -162,22 +164,98 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/category/delete/{id}', name: 'category_delete')]
-    public function deleteCategory(int $id, EntityManagerInterface $em): Response
+    public function deleteCategory(int $id): Response
     {
         // Récupérer la catégorie
-        $category = $em->getRepository(Category::class)->find($id);
+        $category = $this->em->getRepository(Category::class)->find($id);
 
         if (!$category) {
             throw $this->createNotFoundException('Catégorie introuvable');
         }
 
         // Supprimer la catégorie
-        $em->remove($category);
-        $em->flush();
+        $this->em->remove($category);
+        $this->em->flush();
 
         // Notif
         $this->addFlash('success', 'La catégorie a été supprimée avec succès.');
 
         return $this->redirectToRoute('admin_categories');
+    }
+
+    #[Route('/tailles', name: 'sizes')]
+    public function sizes()
+    {
+        $sizes = $this->em->getRepository(Size::class)->findAll();
+
+        return $this->render('admin/size.html.twig', [
+            'sizes' => $sizes,
+            'active' => 'sizes',
+        ]);
+    }
+
+    #[Route('/taille/créer', name: 'size_new')]
+    public function newSize(Request $request): Response
+    {
+        $size = new Size();
+        $form = $this->createForm(SizeType::class, $size);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($size);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Taille créée avec succès !');
+
+            return $this->redirectToRoute('admin_sizes');
+        }
+
+        return $this->render('admin/size_new.html.twig', [
+            'form' => $form->createView(),
+            'active' => 'sizes',
+        ]);
+    }
+
+    #[Route('taille/{id}', name: 'size_show')]
+    public function showSize(Size $size, Request $request): Response
+    {
+        $form = $this->createForm(SizeType::class, $size);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+
+            $this->addFlash('success', 'Taille mise à jour avec succès.');
+
+            return $this->redirectToRoute('admin_size_show', [
+                'id' => $size->getId()
+            ]);
+        }
+
+        return $this->render('admin/size_show.html.twig', [
+            'size' => $size,
+            'form' => $form->createView(),
+            'active' => 'sizes',
+        ]);
+    }
+
+    #[Route('/size/delete/{id}', name: 'size_delete')]
+    public function deleteSize(int $id): Response
+    {
+        // Récupérer la taille
+        $size = $this->em->getRepository(Size::class)->find($id);
+
+        if (!$size) {
+            throw $this->createNotFoundException('Taille introuvable');
+        }
+
+        // Supprimer la taille
+        $this->em->remove($size);
+        $this->em->flush();
+
+        // Notif
+        $this->addFlash('success', 'La taille a été supprimée avec succès.');
+        return $this->redirectToRoute('admin_sizes');
     }
 }
