@@ -43,7 +43,7 @@ final class AdminController extends AbstractController
     {
         $users = $this->em->getRepository(User::class)->findAll();
 
-        return $this->render('admin/user.html.twig', [
+        return $this->render('admin/user/user.html.twig', [
             'users' => $users,
             'active' => 'user',
         ]);
@@ -58,7 +58,7 @@ final class AdminController extends AbstractController
             throw $this->createNotFoundException('Utilisateur introuvable');
         }
 
-        return $this->render('admin/user_show.html.twig', [
+        return $this->render('admin/user/user_show.html.twig', [
             'user' => $user,
             'active' => 'user',
         ]);
@@ -102,7 +102,7 @@ final class AdminController extends AbstractController
     {
         $categories = $this->em->getRepository(Category::class)->findAll();
 
-        return $this->render('admin/category.html.twig', [
+        return $this->render('admin/category/category.html.twig', [
             'categories' => $categories,
             'active' => 'categories',
         ]);
@@ -127,7 +127,7 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('admin_categories');
         }
 
-        return $this->render('admin/category_new.html.twig', [
+        return $this->render('admin/category/category_new.html.twig', [
             'form' => $form->createView(),
             'active' => 'categories',
         ]);
@@ -158,7 +158,7 @@ final class AdminController extends AbstractController
             ]);
         }
 
-        return $this->render('admin/category_show.html.twig', [
+        return $this->render('admin/category/category_show.html.twig', [
             'category' => $category,
             'form' => $form->createView(),
             'active' => 'categories',
@@ -190,7 +190,7 @@ final class AdminController extends AbstractController
     {
         $sizes = $this->em->getRepository(Size::class)->findAll();
 
-        return $this->render('admin/size.html.twig', [
+        return $this->render('admin/size/size.html.twig', [
             'sizes' => $sizes,
             'active' => 'sizes',
         ]);
@@ -212,7 +212,7 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('admin_sizes');
         }
 
-        return $this->render('admin/size_new.html.twig', [
+        return $this->render('admin/size/size_new.html.twig', [
             'form' => $form->createView(),
             'active' => 'sizes',
         ]);
@@ -235,7 +235,7 @@ final class AdminController extends AbstractController
             ]);
         }
 
-        return $this->render('admin/size_show.html.twig', [
+        return $this->render('admin/size/size_show.html.twig', [
             'size' => $size,
             'form' => $form->createView(),
             'active' => 'sizes',
