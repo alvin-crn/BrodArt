@@ -1,0 +1,52 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration couleurs - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/entity-table.css') }}">
+{% endblock css %}
+
+{% block admin_content %}
+<div class="entity-controls">
+    <input type="text" id="entity-search" placeholder="Rechercher une couleur..." />
+    <a href="{{ path('admin_color_new') }}" class="btn btn-create">+ Nouvelle couleur</a>
+</div>
+
+{% for label, messages in app.flashes %}
+<div class="flash-messages flash-{{ label }}">
+  {% for message in messages %}
+  <div class="flash-message">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div class="table-wrapper">
+  <table class="admin-table" id="entity-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th><i class="fa-solid fa-gears"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for color in colors %}
+      <tr data-name="{{ color.name|lower }}">
+        <td>{{ color.name }}</td>
+        <td>
+          <a href="{{ path('admin_color_show', {id: color.id}) }}" class="btn-action">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </a>
+          <a href="{{ path('admin_color_delete', {id: color.id}) }}" class="btn-action btn-delete">
+            <i class="fa-solid fa-trash"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% block script %}
+<script src="{{ asset('js/admin/entity.js') }}"></script>
+{% endblock script %}
+{% endblock %}

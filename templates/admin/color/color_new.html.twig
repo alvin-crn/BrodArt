@@ -1,0 +1,38 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Créer une couleur - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/create-entity.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+
+<h1>Créer une nouvelle couleur</h1>
+
+<!-- Notifications flash -->
+{% for label, messages in app.flashes %}
+<div class="flash-messages flash-{{ label }}">
+  {% for message in messages %}
+  <div class="flash-message">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div class="form-wrapper">
+  {{ form_start(form) }}
+
+  <div class="form-group">
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.name) }}
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    <span class="text">Créer</span>
+  </button>
+
+  {{ form_end(form) }}
+</div>
+
+{% endblock %}

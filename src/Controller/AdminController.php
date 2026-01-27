@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Size;
 use App\Entity\User;
+use App\Entity\Color;
 use App\Form\SizeType;
+use App\Form\ColorType;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -257,5 +259,81 @@ final class AdminController extends AbstractController
         // Notif
         $this->addFlash('success', 'La taille a été supprimée avec succès.');
         return $this->redirectToRoute('admin_sizes');
+    }
+
+    #[Route('/couleurs', name: 'colors')]
+    public function colors()
+    {
+        $colors = $this->em->getRepository(Color::class)->findAll();
+
+        return $this->render('admin/color/color.html.twig', [
+            'colors' => $colors,
+            'active' => 'colors',
+        ]);
+    }
+
+    #[Route('/couleur/créer', name: 'color_new')]
+    public function newColor(Request $request): Response
+    {
+        $color = new Color();
+        $form = $this->createForm(ColorType::class, $color);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($color);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Couleur créée avec succès !');
+
+            return $this->redirectToRoute('admin_colors');
+        }
+
+        return $this->render('admin/color/color_new.html.twig', [
+            'form' => $form->createView(),
+            'active' => 'colors',
+        ]);
+    }
+
+    #[Route('couleur/{id}', name: 'color_show')]
+    public function showColor(Color $color, Request $request): Response
+    {
+        $form = $this->createForm(ColorType::class, $color);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+
+            $this->addFlash('success', 'Couleur mise à jour avec succès.');
+
+            return $this->redirectToRoute('admin_color_show', [
+                'id' => $color->getId()
+            ]);
+        }
+
+        return $this->render('admin/color/color_show.html.twig', [
+            'color' => $color,
+            'form' => $form->createView(),
+            'active' => 'colors',
+        ]);
+    }
+
+    #[Route('/color/delete/{id}', name: 'color_delete')]
+    public function deleteColor(int $id): Response
+    {
+        // Récupérer la couleur
+        $color = $this->em->getRepository(Color::class)->find($id);
+
+        if (!$color) {
+            throw $this->createNotFoundException('Couleur introuvable');
+        }
+
+        // Supprimer la couleur
+        $this->em->remove($color);
+        $this->em->flush();
+
+        // Notif
+        $this->addFlash('success', 'La couleur a été supprimée avec succès.');
+        return $this->redirectToRoute('admin_colors');
     }
 }
