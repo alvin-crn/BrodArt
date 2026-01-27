@@ -20,7 +20,7 @@
             <a href="{{ path('admin_dashboard') }}" class="{% if active == "dashboard" %}active{% endif %}">Dashboard</a>
             <a href="{{ path('admin_user') }}" class="{% if active == "user" %}active{% endif %}">Utilisateurs</a>
             <a href="#">Produits</a>
-            <a href="#">Catégories</a>
+            <a href="{{ path('admin_categories') }}" class="{% if active == "categories" %}active{% endif %}">Catégories</a>
             <a href="#">Tailles</a>
             <a href="#">Couleurs</a>
         </nav>

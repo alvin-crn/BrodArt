@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Category;
+use App\Form\CategoryType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -15,10 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class AdminController extends AbstractController
 {
     private EntityManagerInterface $em;
+    private SluggerInterface $slugger;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, SluggerInterface $slugger)
     {
         $this->em = $em;
+        $this->slugger = $slugger;
     }
 
     #[Route('/dashboard', name: 'dashboard')]
@@ -41,7 +46,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/utilisateur/{id}', name: 'user_show', methods: ['GET'])]
-    public function userShow(int $id): Response
+    public function showUser(int $id): Response
     {
         $user = $this->em->getRepository(User::class)->find($id);
 
@@ -86,5 +91,93 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('admin_user_show', [
             'id' => $user->getId()
         ]);
+    }
+
+    #[Route('/catégories', name: 'categories')]
+    public function categories(EntityManagerInterface $em)
+    {
+        $categories = $em->getRepository(Category::class)->findAll();
+
+        return $this->render('admin/category.html.twig', [
+            'categories' => $categories,
+            'active' => 'categories',
+        ]);
+    }
+
+    #[Route('/catégories/créer', name: 'category_new')]
+    public function newCategory(Request $request): Response
+    {
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $this->slugger->slug($category->getName())->lower();
+            $category->setSlug($slug);
+            $this->em->persist($category);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Catégorie créée avec succès !');
+
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        return $this->render('admin/category_new.html.twig', [
+            'form' => $form->createView(),
+            'active' => 'categories',
+        ]);
+    }
+
+    #[Route('catégorie/{slug}', name: 'category_show')]
+    public function showCategory($slug, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
+    {
+        $category = $this->em->getRepository(Category::class)->findOneBy(['slug' => $slug]);
+
+        if (!$category) {
+            throw $this->createNotFoundException('Catégorie introuvable');
+        }
+
+        $form = $this->createForm(CategoryType::class, $category);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugger->slug($category->getName())->lower();
+            $category->setSlug($slug);
+            $em->flush();
+
+            $this->addFlash('success', 'Catégorie mise à jour avec succès.');
+
+            return $this->redirectToRoute('admin_category_show', [
+                'slug' => $category->getSlug(),
+            ]);
+        }
+
+        return $this->render('admin/category_show.html.twig', [
+            'category' => $category,
+            'form' => $form->createView(),
+            'active' => 'categories',
+        ]);
+    }
+
+    #[Route('/category/delete/{id}', name: 'category_delete')]
+    public function deleteCategory(int $id, EntityManagerInterface $em): Response
+    {
+        // Récupérer la catégorie
+        $category = $em->getRepository(Category::class)->find($id);
+
+        if (!$category) {
+            throw $this->createNotFoundException('Catégorie introuvable');
+        }
+
+        // Supprimer la catégorie
+        $em->remove($category);
+        $em->flush();
+
+        // Notif
+        $this->addFlash('success', 'La catégorie a été supprimée avec succès.');
+
+        return $this->redirectToRoute('admin_categories');
     }
 }
