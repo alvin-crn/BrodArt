@@ -54,6 +54,9 @@
         <a href="{{ path('account') }}">Mon compte</a>
         <a href="{{ path('account_orders') }}">Mes commandes</a>
         <a href="{{ path('account_addresses') }}">Mes adresses</a>
+        {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_dashboard') }}">TDB administrateur</a>
+        {% endif %}
         <a href="{{ path('app_logout') }}">Se déconnecter</a>
       </div>
     </div>

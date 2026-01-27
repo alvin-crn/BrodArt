@@ -1,7 +1,7 @@
 <div class="menu-account">
     <ul>
         {% if is_granted('ROLE_ADMIN') %}
-            <li><a href="{{ path('admin') }}" target="_blank">Tableau de bord administratif<i class="fas fa-tachometer-alt"></i></a></li>
+            <li><a href="{{ path('admin_dashboard') }}" target="_blank">Tableau de bord administratif<i class="fas fa-tachometer-alt"></i></a></li>
         {% endif %}
         <li><a href="{{ path('account') }}" {% if active == "account" %}class="active"{% endif %}>Mes informations personnelles<i class="fas fa-address-card"></i></a></li>
         <li><a href="{{ path('account_password') }}" {% if active == "editPsw" %}class="active"{% endif %}>Modifier mon mot de passe<i class="fas fa-key"></i></a></li>

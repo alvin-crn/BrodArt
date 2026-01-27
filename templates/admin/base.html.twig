@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Administration - Brod'Art{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('css/admin/admin.css') }}">
+    {% block css %} {% endblock %}
+    <script src="https://kit.fontawesome.com/6f4e25e570.js" crossorigin="anonymous"></script>
+    {% block javascript %} {% endblock %}
+</head>
+
+<body class="admin-layout">
+    <!-- LEFT SIDEBAR -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+            <img src="{{ asset('media/logo-brodart.png') }}" alt="Logo brodart">
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{{ path('admin_dashboard') }}" class="{% if active == "dashboard" %}active{% endif %}">Dashboard</a>
+            <a href="{{ path('admin_user') }}" class="{% if active == "user" %}active{% endif %}">Utilisateurs</a>
+            <a href="#">Produits</a>
+            <a href="#">Catégories</a>
+            <a href="#">Tailles</a>
+            <a href="#">Couleurs</a>
+        </nav>
+    </aside>
+
+    <!-- RIGHT PART -->
+    <div class="admin-main">
+        <!-- TOP NAVBAR -->
+        <header class="admin-navbar">
+            <div class="navbar-left"></div>
+            <div class="navbar-right">
+                <span class="user-info">
+                    {{ app.user.email }} <br>
+                    {{ app.user.roles[1]|replace({'ROLE_':' '}) }}
+                </span>
+                <a href="{{ path('home') }}" class="btn-website">Brod'Art</a>
+                <a href="{{ path('app_logout') }}" class="btn-logout">Déconnexion</a>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <main class="admin-content">
+            {% block admin_content %}{% endblock %}
+        </main>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    {% block script %}{% endblock %}
+</body>
+
+</html>
