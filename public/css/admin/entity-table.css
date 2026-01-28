@@ -14,7 +14,10 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: Arial, sans-serif;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 14px;
 }
 
 .admin-table th,

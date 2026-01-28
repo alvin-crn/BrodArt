@@ -1,3 +1,17 @@
+:root {
+    --bg-main: #ffffff;
+    --bg-panel: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-hover: #f1f5f9;
+
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+
+    --accent: #2563eb;
+    --danger: #dc2626;
+    --success: #16a34a;
+}
+
 /* RESET */
 * {
     box-sizing: border-box;
@@ -5,7 +19,8 @@
     padding: 0;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     overflow: hidden;
     font-family: Arial, sans-serif;
@@ -20,24 +35,28 @@ html, body {
 /* SIDEBAR */
 .admin-sidebar {
     width: 240px;
-    background: #1e1e2f;
-    color: #fff;
+    background: var(--bg-panel);
+    color: var(--text-main);
     display: flex;
     flex-direction: column;
     position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
+    z-index: 20;
 }
 
 .sidebar-logo {
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: center;
 }
 
 .sidebar-logo img {
-    height: 150px;
+    display: block;
+    width: 135px;
+    height: 90px;
+    object-fit: cover;
 }
 
 .sidebar-menu {
@@ -48,7 +67,7 @@ html, body {
 
 .sidebar-menu a {
     display: block;
-    color: #cfcfe4;
+    color: var(--text-muted);
     text-decoration: none;
     padding: 10px 15px;
     border-radius: 6px;
@@ -57,8 +76,8 @@ html, body {
 
 .sidebar-menu a:hover,
 .sidebar-menu a.active {
-    background: #343454;
-    color: #fff;
+    background: var(--bg-hover);
+    color: var(--accent);
 }
 
 /* MAIN PART */
@@ -73,8 +92,9 @@ html, body {
 /* NAVBAR */
 .admin-navbar {
     height: 60px;
-    background: #fff;
-    border-bottom: 1px solid #e0e0e0;
+    background: var(--bg-panel);
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -92,7 +112,7 @@ html, body {
 
 .user-info {
     font-size: 14px;
-    color: #555;
+    color: var(--text-muted);
     text-align: end;
 }
 
@@ -100,14 +120,23 @@ html, body {
 .btn-website {
     text-decoration: none;
     padding: 6px 12px;
-    background: #e63946;
-    color: #fff;
+    background: transparent;
+    border: 1px solid #334155;
+    color: var(--text-main);
     border-radius: 4px;
     font-size: 14px;
 }
 
-.btn-website {
-    background: linear-gradient(180deg, rgb(247, 110, 26), rgb(192, 41, 59));
+.btn-logout:hover {
+    background: rgba(248, 113, 113, 0.15);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.btn-website:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 /* CONTENT */
@@ -115,5 +144,6 @@ html, body {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-    background: #f5f6fa;
+    background: var(--bg-main);
+    color: var(--text-main);
 }
