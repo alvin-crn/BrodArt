@@ -135,7 +135,7 @@
 
 .home-page .home-page-center .best-seller-container .card-container .card .card-footer .text .price {
   display: flex;
-  justify-content: end;
+  justify-content: center;
   margin-top: 10px;
 }
 

@@ -9,7 +9,7 @@
 {% block admin_content %}
 <div class="entity-controls">
     <input type="text" id="entity-search" placeholder="Rechercher une catégorie..." />
-    <a href="{{ path('admin_category_new') }}" class="btn btn-create">+ Nouvelle catégorie</a>
+    <a href="{{ path('admin_category_new') }}" class="btn btn-create"><i class="fa-solid fa-circle-plus"></i> Nouvelle catégorie</a>
 </div>
 
 {% for label, messages in app.flashes %}

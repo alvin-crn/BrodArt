@@ -9,7 +9,7 @@
 {% block admin_content %}
 <div class="entity-controls">
     <input type="text" id="entity-search" placeholder="Rechercher une taille..." />
-    <a href="{{ path('admin_size_new') }}" class="btn btn-create">+ Nouvelle taille</a>
+    <a href="{{ path('admin_size_new') }}" class="btn btn-create"><i class="fa-solid fa-circle-plus"></i> Nouvelle taille</a>
 </div>
 
 {% for label, messages in app.flashes %}

@@ -9,7 +9,7 @@
 {% block admin_content %}
 <div class="entity-controls">
     <input type="text" id="entity-search" placeholder="Rechercher une couleur..." />
-    <a href="{{ path('admin_color_new') }}" class="btn btn-create">+ Nouvelle couleur</a>
+    <a href="{{ path('admin_color_new') }}" class="btn btn-create"><i class="fa-solid fa-circle-plus"></i> Nouvelle couleur</a>
 </div>
 
 {% for label, messages in app.flashes %}

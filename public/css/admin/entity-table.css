@@ -6,7 +6,7 @@
 }
 
 .table-wrapper {
-  max-height: 500px;
+  height: 90%;
   overflow-y: auto;
   margin-top: 15px;
 }
@@ -31,22 +31,28 @@
   background-color: #f5f5f5;
 }
 
+/* Actions */
 .btn-action {
-  color: #007bff;
-  text-decoration: none;
-  margin-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: #e5e7eb;
+  color: #1f2937;
+  margin: 0 2px;
+  transition: all 0.2s ease;
 }
 
 .btn-action:hover {
-  color: #0056b3;
+  background: var(--accent);
+  color: white;
 }
 
-.btn-delete {
-  color: #dc3545;
-}
-
-.btn-delete:hover {
-  color: #a71d2a;
+.btn-action.btn-delete:hover {
+  background: var(--danger);
+  color: white;
 }
 
 #entity-search {
