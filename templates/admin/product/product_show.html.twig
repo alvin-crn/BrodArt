@@ -1,0 +1,114 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier {{product.name}} - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/create-product.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+
+{{ form_start(form, {'attr': {'class': 'product-form'}}) }}
+
+<h2>Informations produit</h2>
+
+<div class="form-row">
+    <label>Catégorie</label>
+    <div class="inline">
+        {{ form_widget(form.category) }}
+        <a href="{{ path('admin_category_new') }}" class="btn-small">+</a>
+    </div>
+</div>
+
+<div class="form-row">
+    <label>Couleur</label>
+    <div class="inline">
+        {{ form_widget(form.color) }}
+        <a href="{{ path('admin_color_new') }}" class="btn-small">+</a>
+    </div>
+</div>
+
+<div class="form-row">{{ form_row(form.name) }}</div>
+<div class="form-row">{{ form_row(form.subtitle) }}</div>
+<div class="form-row">{{ form_row(form.description) }}</div>
+
+<h2>Images</h2>
+
+<div class="images-preview-container" id="images-preview-container">
+    {# Images existantes du produit #}
+    {% for i in 0..9 %}
+    {% set prop = 'illustration' ~ (i > 0 ? i + 1 : '') %}
+    {% if attribute(product, prop) %}
+    <div class="img-preview" data-existing="1" data-prop="{{ prop }}">
+        <img src="{{ asset('media/product/' ~ attribute(product, prop)) }}"
+            alt="Image {{ i + 1 }} : {{ attribute(product, prop) }}">
+        <button type="button" class="remove-image" data-prop="{{ prop }}">✕</button>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<div class="images-inputs">
+    <div class="img-wrapper">
+        <label class="img-label">Image 1 (principale)</label>
+        {{ form_widget(form.illustration, { attr: { class: 'img-input', accept: 'image/*', 'data-index': 0 } }) }}
+    </div>
+
+    {% for i in 2..10 %}
+    <div class="img-wrapper">
+        <label class="img-label">Image {{ i }}</label>
+        {{ attribute(form, 'illustration' ~ i) ? form_widget(attribute(form, 'illustration' ~ i), { attr: { class:
+        'img-input', accept: 'image/*', 'data-index': i - 1 } }) : '' }}
+    </div>
+    {% endfor %}
+</div>
+
+<div id="deleted-images-container"></div>
+
+<h2>Prix</h2>
+<div class="form-row">{{ form_row(form.price) }}</div>
+<div class="form-row">{{ form_row(form.promo) }}</div>
+<div class="form-row">{{ form_row(form.deliveryCost) }}</div>
+<div class="form-row">{{ form_row(form.isBest) }}</div>
+
+<h2>Tailles & stock</h2>
+<div class="sizes-and-stock-section">
+    <div id="sizes-container">
+        {# Affichage des tailles déjà existantes #}
+        {% for productSize in product.productSizes %}
+        <div class="size-row" data-existing="1" data-id="{{ productSize.id }}">
+            <select name="existing-sizes[]">
+                {% for size in sizes %}
+                <option value="{{ size.id }}" {% if size.id == productSize.size.id %}selected{% endif %}>
+                    {{ size.size }}
+                </option>
+                {% endfor %}
+            </select>
+            <input type="number" name="existing-stocks[]" min="0" value="{{ productSize.stock }}">
+            <button type="button" class="remove-size">✕</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" id="add-size">+ Ajouter une taille</button>
+
+    {# Select caché pour cloner les options lors de l'ajout #}
+    <select id="sizes-options" style="display:none;">
+        {% for size in sizes %}
+        <option value="{{ size.id }}">{{ size.size }}</option>
+        {% endfor %}
+    </select>
+
+    {# Container pour stocker les IDs des tailles supprimées #}
+    <div id="deleted-sizes-container"></div>
+</div>
+
+<button type="submit" class="btn-primary">Modifier le produit</button>
+
+{{ form_end(form) }}
+
+{% block script %}
+<script src="{{ asset('js/admin/show-product.js') }}"></script>
+{% endblock script %}
+
+{% endblock %}

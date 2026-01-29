@@ -1,0 +1,103 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration articles - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/product.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+
+{% for label, messages in app.flashes %}
+<div class="flash-messages flash-{{ label }}">
+  {% for message in messages %}
+  <div class="flash-message">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div class="toolbar">
+  <div class="toolbar-left">
+    <input type="text" id="product-search" placeholder="Rechercher un produit..." />
+  </div>
+
+  <div class="toolbar-right">
+    <a href="{{ path('admin_product_new') }}" class="btn btn-create">
+      <i class="fa-solid fa-circle-plus"></i> Nouveau produit
+    </a>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table class="admin-table" id="products-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Nom</th>
+        <th>Catégorie</th>
+        <th>Prix</th>
+        <th>Promo</th>
+        <th>Frais de port</th>
+        <th>Best</th>
+        <th class="center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr data-name="{{ product.name|lower }}" data-category="{{ product.category.name|lower }}">
+        <td>
+          <img src="{{ asset('media/product/' ~ product.illustration) }}" alt="{{ product.name }}"
+            class="product-thumb">
+        </td>
+
+        <td>{{ product.name }}</td>
+
+        <td>
+          <span class="badge badge-category">
+            {{ product.category.name }}
+          </span>
+        </td>
+
+        <td>{{ (product.price / 100) |number_format(2, ',', ' ') }} €</td>
+
+        <td>
+          {% if product.promo %}
+          <span class="badge badge-promo">
+            {{ (product.promo / 100) |number_format(2, ',', ' ') }} €
+          </span>
+          {% else %}
+          —
+          {% endif %}
+        </td>
+
+        <td>{{ (product.deliveryCost / 100) |number_format(2, ',', ' ') }} €</td>
+
+        <td class="center">
+          {% if product.isBest %}
+          <span class="badge badge-best">Oui</span>
+          {% else %}
+          <span class="badge badge-muted">Non</span>
+          {% endif %}
+        </td>
+
+        <td class="center">
+          <a href="{{ path('admin_product_show', { id: product.id }) }}" class="btn-action" title="Modifier">
+            <i class="fa-solid fa-pen"></i>
+          </a>
+
+          <a href="" class="btn-action danger"
+            title="Supprimer" onclick="return confirm('Supprimer ce produit ?')">
+            <i class="fa-solid fa-trash"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% block script %}
+<script src="{{ asset('js/admin/product.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

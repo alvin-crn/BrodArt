@@ -1,0 +1,80 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Créer un article - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/create-product.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+
+{{ form_start(form, {'attr': {'class': 'product-form'}}) }}
+
+<h2>Informations produit</h2>
+
+<div class="form-row">
+  <label>Catégorie</label>
+  <div class="inline">
+    {{ form_widget(form.category) }}
+    <a href="{{ path('admin_category_new') }}" class="btn-small">+</a>
+  </div>
+</div>
+
+<div class="form-row">
+  <label>Couleur</label>
+  <div class="inline">
+    {{ form_widget(form.color) }}
+    <a href="{{ path('admin_color_new') }}" class="btn-small">+</a>
+  </div>
+</div>
+
+<div class="form-row">{{ form_row(form.name) }}</div>
+<div class="form-row">{{ form_row(form.subtitle) }}</div>
+<div class="form-row">{{ form_row(form.description) }}</div>
+
+<h2>Images</h2>
+
+<div class="images-preview-container" id="images-preview-container"></div>
+
+<div class="images-inputs">
+  <div class="img-wrapper">
+    <label class="img-label">Image 1 (principale)</label>
+    {{ form_widget(form.illustration, { attr: { class: 'img-input', accept: 'image/*', 'data-index': 0 } }) }}
+  </div>
+
+  {% for i in 2..10 %}
+  <div class="img-wrapper">
+    <label class="img-label">Image {{ i }}</label>
+    {{ attribute(form, 'illustration' ~ i) ? form_widget(attribute(form, 'illustration' ~ i), { attr: { class:
+    'img-input', accept: 'image/*', 'data-index': i - 1 } }) : '' }}
+  </div>
+  {% endfor %}
+</div>
+
+<h2>Prix</h2>
+<div class="form-row">{{ form_row(form.price) }}</div>
+<div class="form-row">{{ form_row(form.promo) }}</div>
+<div class="form-row">{{ form_row(form.deliveryCost) }}</div>
+<div class="form-row">{{ form_row(form.isBest) }}</div>
+
+<h2>Tailles & stock</h2>
+<div class="sizes-and-stock-section">
+  <div id="sizes-container"></div>
+  <button type="button" id="add-size">+ Ajouter une taille</button>
+
+  <select id="sizes-options" style="display:none;">
+    {% for size in sizes %}
+    <option value="{{ size.id }}">{{ size.size }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<button type="submit" class="btn-primary">Créer le produit</button>
+
+{{ form_end(form) }}
+
+{% block script %}
+<script src="{{ asset('js/admin/create-product.js') }}"></script>
+{% endblock script %}
+
+{% endblock %}

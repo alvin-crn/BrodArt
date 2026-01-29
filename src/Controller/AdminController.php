@@ -6,14 +6,23 @@ use App\Entity\Size;
 use App\Entity\User;
 use App\Entity\Color;
 use App\Form\SizeType;
+use App\Entity\Product;
 use App\Form\ColorType;
 use App\Entity\Category;
+use App\Form\ProductType;
 use App\Form\CategoryType;
+use App\Entity\ProductSize;
+use App\Repository\SizeRepository;
+use App\Repository\ColorRepository;
+use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductSizeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -23,11 +32,21 @@ final class AdminController extends AbstractController
 {
     private EntityManagerInterface $em;
     private SluggerInterface $slugger;
+    private ProductRepository $productRepo;
+    private CategoryRepository $categoryRepo;
+    private ColorRepository $colorRepo;
+    private SizeRepository $sizeRepo;
+    private ProductSizeRepository $productSizeRepo;
 
-    public function __construct(EntityManagerInterface $em, SluggerInterface $slugger)
+    public function __construct(EntityManagerInterface $em, SluggerInterface $slugger, ProductRepository $productRepo, CategoryRepository $categoryRepo, ColorRepository $colorRepo, SizeRepository $sizeRepo, ProductSizeRepository $productSizeRepo)
     {
         $this->em = $em;
         $this->slugger = $slugger;
+        $this->productRepo = $productRepo;
+        $this->categoryRepo = $categoryRepo;
+        $this->colorRepo = $colorRepo;
+        $this->sizeRepo = $sizeRepo;
+        $this->productSizeRepo = $productSizeRepo;
     }
 
     #[Route('/dashboard', name: 'dashboard')]
@@ -335,5 +354,209 @@ final class AdminController extends AbstractController
         // Notif
         $this->addFlash('success', 'La couleur a été supprimée avec succès.');
         return $this->redirectToRoute('admin_colors');
+    }
+
+    #[Route('/articles', name: 'products')]
+    public function products(): Response
+    {
+        $products = $this->em->getRepository(Product::class)->findAll();
+
+        return $this->render('admin/product/product.html.twig', [
+            'products' => $products,
+            'active' => 'products',
+        ]);
+    }
+
+    #[Route('/article/nouvel-article', name: 'product_new')]
+    public function createProduct(Request $request, SluggerInterface $slugger): Response
+    {
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        $sizes = $this->sizeRepo->findAll();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Image principale
+            $this->handleImage($form->get('illustration')->getData(), $product, 'setIllustration');
+
+            // Images secondaires
+            for ($i = 2; $i <= 10; $i++) {
+                $this->handleImage($form->get('illustration' . $i)->getData(), $product, 'setIllustration' . $i);
+            }
+
+            // Slug automatique
+            $product->setSlug(strtolower($slugger->slug($product->getName())));
+            $product->setCreatedAt(new \DateTimeImmutable());
+
+            $priceEuro = $form->get('price')->getData();
+            $product->setPrice((int) round($priceEuro * 100));
+
+            $promoEuro = $form->get('promo')->getData();
+            if ($promoEuro !== null) {
+                $product->setPromo((int) round($promoEuro * 100));
+            }
+
+            $deliveryEuro = $form->get('deliveryCost')->getData();
+            $product->setDeliveryCost((int) round($deliveryEuro * 100));
+
+            // Gestion tailles
+            $sizesIds = $request->request->all('sizes', []);
+            $stocks = $request->request->all('stocks', []);
+            foreach ($sizesIds as $i => $sizeId) {
+                $size = $this->sizeRepo->find($sizeId);
+                if ($size && isset($stocks[$i])) {
+                    $ps = new ProductSize();
+                    $ps->setProduct($product);
+                    $product->addProductSize($ps);
+                    $ps->setSize($size);
+                    $ps->setStock((int)$stocks[$i]);
+                    $this->em->persist($ps);
+                }
+            }
+            $this->em->persist($product);
+            $this->em->flush();
+            $this->addFlash('success', 'Produit créé avec succès !');
+            return $this->redirectToRoute('admin_products');
+        }
+
+        return $this->render('admin/product/product_new.html.twig', [
+            'form' => $form->createView(),
+            'sizes' => $sizes,
+            'active' => 'products',
+        ]);
+    }
+
+    #[Route('/article/{id}/modifier', name: 'product_show')]
+    public function editProduct(Request $request, Product $product): Response
+    {
+        $product->setPrice($product->getPrice() / 100);
+        $product->setPromo($product->getPromo() / 100);
+        $product->setDeliveryCost($product->getDeliveryCost() / 100);
+
+        $form = $this->createForm(ProductType::class, $product, [
+            'edit' => true
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            dump($request->request->all());
+            // === Supprimer les images existantes si demandé === 
+            $imagesToRemove = $request->request->all('deleted_images');
+            foreach ($imagesToRemove as $prop) {
+                $filename = $product->{'get' . ucfirst($prop)}(); // Récupérer le nom de fichier actuel
+                if (!$filename) {
+                    continue;
+                } // Si pas d'image, passer
+                $path = $this->getParameter('kernel.project_dir') . '/public/media/product/' . $filename; // Construire le chemin complet
+                if (file_exists($path)) {
+                    unlink($path);
+                } // Supprimer le fichier s'il existe
+                $product->{'set' . ucfirst($prop)}(null); // Mettre à null dans l'entité
+            }
+
+            // === Gérer les nouvelles images uploadées ===
+            for ($i = 0; $i <= 9; $i++) {
+                $propForm = $i === 0 ? 'illustration' : 'illustration' . ($i + 1);
+                /** @var UploadedFile|null $uploadedFile */
+                $uploadedFile = $form->get($propForm)->getData();
+
+                if (!$uploadedFile) {
+                    continue;
+                }
+
+                // Chercher la première illustration vide en bdd
+                $targetProp = null;
+                for ($j = 0; $j <= 9; $j++) {
+                    $checkProp = $j === 0 ? 'illustration' : 'illustration' . ($j + 1);
+                    if ($product->{'get' . ucfirst($checkProp)}() === null) {
+                        $targetProp = $checkProp;
+                        break;
+                    }
+                }
+
+                // S’il n’y a pas d'illustration de disponible, on skip
+                if (!$targetProp) {
+                    $this->addFlash('error', 'Impossible d’ajouter l’image : déjà 10 images maximum.');
+                    continue;
+                }
+
+                // Appel de handleImage avec la première case vide trouvée
+                $this->handleImage($uploadedFile, $product, 'set' . ucfirst($targetProp));
+            }
+
+            // === Convertir prix, promo, delivery_cost en centimes ===
+            $product->setPrice((int)round($product->getPrice() * 100));
+            if ($product->getPromo()) {
+                $product->setPromo((int)round($product->getPromo() * 100));
+            }
+            $product->setDeliveryCost((int)round($product->getDeliveryCost() * 100));
+
+            // === Gestion des tailles/stock ===
+            // Supprimer les tailles retirées
+            $deletedSizes = $request->request->all('deleted_sizes', []);
+            foreach ($deletedSizes as $psId) {
+                $productSize = $this->productSizeRepo->find($psId);
+                if ($productSize && $productSize->getProduct()->getId() === $product->getId()) {
+                    $product->removeProductSize($productSize);
+                    $this->em->remove($productSize);
+                }
+            }
+
+            // Mettre à jour le stock des tailles existantes
+            $existingSizes = $request->request->all('existing-sizes', []);
+            $existingStocks = $request->request->all('existing-stocks', []);
+            foreach ($existingSizes as $i => $psId) {
+                $productSize = $this->productSizeRepo->find($psId);
+                if ($productSize && isset($existingStocks[$i])) {
+                    $productSize->setStock((int) $existingStocks[$i]);
+                    $this->em->persist($productSize);
+                }
+            }
+
+            // Ajouter les nouvelles tailles/stocks
+            $newSizes = $request->request->all('new-sizes', []);
+            $newStocks = $request->request->all('new-stocks', []);
+            foreach ($newSizes as $i => $sizeId) {
+                $sizeEntity = $this->sizeRepo->find($sizeId);
+                if ($sizeEntity && isset($newStocks[$i])) {
+                    $ps = new ProductSize();
+                    $ps->setProduct($product);
+                    $ps->setSize($sizeEntity);
+                    $ps->setStock((int) $newStocks[$i]);
+                    $product->addProductSize($ps);
+                    $this->em->persist($ps);
+                }
+            }
+
+            $this->em->persist($product);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Produit mis à jour avec succès');
+            return $this->redirectToRoute('admin_products');
+        }
+
+        return $this->render('admin/product/product_show.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product,
+            'sizes' => $this->sizeRepo->findAll(),
+            'active' => 'products',
+        ]);
+    }
+
+    private function handleImage(?UploadedFile $file, Product $product, string $setter): void
+    {
+        if (!$file) {
+            return;
+        }
+
+        $filename = uniqid() . '.' . $file->guessExtension();
+
+        $file->move(
+            $this->getParameter('kernel.project_dir') . '/public/media/product',
+            $filename
+        );
+
+        $product->$setter($filename);
     }
 }
