@@ -12,11 +12,6 @@ use App\Entity\Category;
 use App\Form\ProductType;
 use App\Form\CategoryType;
 use App\Entity\ProductSize;
-use App\Repository\SizeRepository;
-use App\Repository\ColorRepository;
-use App\Repository\ProductRepository;
-use App\Repository\CategoryRepository;
-use App\Repository\ProductSizeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,21 +27,11 @@ final class AdminController extends AbstractController
 {
     private EntityManagerInterface $em;
     private SluggerInterface $slugger;
-    private ProductRepository $productRepo;
-    private CategoryRepository $categoryRepo;
-    private ColorRepository $colorRepo;
-    private SizeRepository $sizeRepo;
-    private ProductSizeRepository $productSizeRepo;
 
-    public function __construct(EntityManagerInterface $em, SluggerInterface $slugger, ProductRepository $productRepo, CategoryRepository $categoryRepo, ColorRepository $colorRepo, SizeRepository $sizeRepo, ProductSizeRepository $productSizeRepo)
+    public function __construct(EntityManagerInterface $em, SluggerInterface $slugger)
     {
         $this->em = $em;
         $this->slugger = $slugger;
-        $this->productRepo = $productRepo;
-        $this->categoryRepo = $categoryRepo;
-        $this->colorRepo = $colorRepo;
-        $this->sizeRepo = $sizeRepo;
-        $this->productSizeRepo = $productSizeRepo;
     }
 
     #[Route('/dashboard', name: 'dashboard')]
@@ -374,7 +359,7 @@ final class AdminController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        $sizes = $this->sizeRepo->findAll();
+        $sizes = $this->em->getRepository(Size::class)->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Image principale
@@ -404,7 +389,7 @@ final class AdminController extends AbstractController
             $sizesIds = $request->request->all('sizes', []);
             $stocks = $request->request->all('stocks', []);
             foreach ($sizesIds as $i => $sizeId) {
-                $size = $this->sizeRepo->find($sizeId);
+                $size = $this->em->getRepository(Size::class)->find($sizeId);
                 if ($size && isset($stocks[$i])) {
                     $ps = new ProductSize();
                     $ps->setProduct($product);
@@ -496,7 +481,7 @@ final class AdminController extends AbstractController
             // Supprimer les tailles retirées
             $deletedSizes = $request->request->all('deleted_sizes', []);
             foreach ($deletedSizes as $psId) {
-                $productSize = $this->productSizeRepo->find($psId);
+                $productSize = $this->em->getRepository(ProductSize::class)->find($psId);
                 if ($productSize && $productSize->getProduct()->getId() === $product->getId()) {
                     $product->removeProductSize($productSize);
                     $this->em->remove($productSize);
@@ -507,7 +492,7 @@ final class AdminController extends AbstractController
             $existingSizes = $request->request->all('existing-sizes', []);
             $existingStocks = $request->request->all('existing-stocks', []);
             foreach ($existingSizes as $i => $psId) {
-                $productSize = $this->productSizeRepo->find($psId);
+                $productSize = $this->em->getRepository(ProductSize::class)->find($psId);
                 if ($productSize && isset($existingStocks[$i])) {
                     $productSize->setStock((int) $existingStocks[$i]);
                     $this->em->persist($productSize);
@@ -518,7 +503,7 @@ final class AdminController extends AbstractController
             $newSizes = $request->request->all('new-sizes', []);
             $newStocks = $request->request->all('new-stocks', []);
             foreach ($newSizes as $i => $sizeId) {
-                $sizeEntity = $this->sizeRepo->find($sizeId);
+                $sizeEntity = $this->em->getRepository(Size::class)->find($sizeId);
                 if ($sizeEntity && isset($newStocks[$i])) {
                     $ps = new ProductSize();
                     $ps->setProduct($product);
@@ -539,7 +524,7 @@ final class AdminController extends AbstractController
         return $this->render('admin/product/product_show.html.twig', [
             'form' => $form->createView(),
             'product' => $product,
-            'sizes' => $this->sizeRepo->findAll(),
+            'sizes' => $this->em->getRepository(Size::class)->findAll(),
             'active' => 'products',
         ]);
     }
