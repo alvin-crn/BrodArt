@@ -31,7 +31,7 @@
                     <div class="products-order">
                         <div class="products">
                             <img src="{{ asset('media/product/' ~ row.productSize.product.illustration) }}" alt="{{ row.productSize.product.name }}">
-                            <p>{{ row.product }}</p>
+                            <p>{{ row.productName }}</p>
                             <p>x {{ row.quantity }}</p>
                             {% if row.productSize.product.promo %}
                             <p>{{ ((row.productSize.product.promo * row.quantity) / 100)|number_format(2, ',', '.') }} €</p>
