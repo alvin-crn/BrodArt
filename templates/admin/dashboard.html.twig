@@ -1,8 +1,55 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}Dashboard administration - Brod'Art{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
+{% endblock css %}
 
 {% block admin_content %}
-    <h1>Bienvenue sur le tableau de bord administrateur</h1>
-    <p>Utilisez le menu de gauche pour naviguer entre les différentes sections de l'administration.</p>
+<div class="dashboard">
+    <h1>Dashboard</h1>
+    <div class="dashboard-grid">
+
+        <!-- Commandes -->
+        <div class="dashboard-card">
+            <h3>📦 Commandes</h3>
+            <ul>
+                <li>Total : <strong>{{ stats.orders.total }}</strong></li>
+                <li>À traiter : <strong class="badge badge-warning">{{ stats.orders.pending }}</strong></li>
+                <li>En préparation : <strong class="badge badge-info">{{ stats.orders.preparing }}</strong></li>
+                <li>Expédiées : <strong class="badge badge-success">{{ stats.orders.shipped }}</strong></li>
+            </ul>
+        </div>
+
+        <!-- Utilisateurs -->
+        <div class="dashboard-card">
+            <h3>👤 Utilisateurs</h3>
+            <ul>
+                <li>Total : <strong>{{ stats.users.total }}</strong></li>
+                <li>Désactivés : <strong class="badge badge-warning">{{ stats.users.disabled }}</strong></li>
+                <li>Blacklistés : <strong class="badge badge-danger">{{ stats.users.blacklisted }}</strong></li>
+            </ul>
+        </div>
+
+        <!-- Produits -->
+        <div class="dashboard-card">
+            <h3>🛍 Produits</h3>
+            <ul>
+                <li>Total : <strong>{{ stats.products.total }}</strong></li>
+                <li>Rupture : <strong class="badge badge-danger">{{ stats.products.outOfStock }}</strong></li>
+                <li>En promo : <strong class="badge badge-info">{{ stats.products.promo }}</strong></li>
+            </ul>
+        </div>
+
+        <!-- Chiffres -->
+        <div class="dashboard-card">
+            <h3>💰 Chiffres</h3>
+            <ul>
+                <li>CA total : <strong>{{ stats.revenue.total }} €</strong></li>
+                <li>CA du mois : <strong>{{ stats.revenue.month }} €</strong></li>
+                <li>Panier moyen : <strong>{{ stats.revenue.average }} €</strong></li>
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

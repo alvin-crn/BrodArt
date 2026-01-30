@@ -38,7 +38,81 @@ final class AdminController extends AbstractController
     #[Route('/dashboard', name: 'dashboard')]
     public function dashboard(): Response
     {
+        $now = new \DateTimeImmutable();
+        $firstDayOfMonth = $now->modify('first day of this month 00:00:00');
+
+        // ===== Commandes =====
+        $orders = $this->em->getRepository(Order::class)->findAll();
+
+        $ordersStats = [
+            'total' => count($orders),
+            'pending' => count(array_filter($orders, fn($o) => $o->getState() === 1)),
+            'preparing' => count(array_filter($orders, fn($o) => $o->getState() === 2)),
+            'shipped' => count(array_filter($orders, fn($o) => $o->getState() === 3)),
+        ];
+
+        // ===== Utilisateurs =====
+        $users = $this->em->getRepository(User::class)->findAll();
+
+        $usersStats = [
+            'total' => count($users),
+            'disabled' => count(array_filter($users, fn($u) => $u->getDesactived())),
+            'blacklisted' => count(array_filter($users, fn($u) => $u->getBlacklist())),
+        ];
+
+        // ===== Produits =====
+        $products = $this->em->getRepository(Product::class)->findAll();
+
+        $productsStats = [
+            'total' => count($products),
+            'outOfStock' => count(array_filter(
+                $products,
+                fn($p) =>
+                $p->getProductSizes()->reduce(fn($carry, $ps) => $carry + ($ps->getStock() > 0 ? 0 : 1), 0) > 0
+            )),
+            'promo' => count(array_filter($products, fn($p) => $p->getPromo() > 0)),
+        ];
+
+        // ===== Revenu =====
+        $totalRevenue = 0;
+        $monthRevenue = 0;
+
+        foreach ($orders as $order) {
+            if ($order->getState() === 0) continue;
+
+            foreach ($order->getOrderDetails() as $detail) {
+                $total = $detail->getPrice() * $detail->getQuantity();
+                $totalRevenue += $total;
+
+                if ($order->getCreatedAt() >= $firstDayOfMonth) {
+                    $monthRevenue += $total;
+                }
+            }
+
+            // Ajouter frais de port / carrier si tu as un champ
+            if ($order->getCarrierPrice()) {
+                $totalRevenue += $order->getCarrierPrice();
+                if ($order->getCreatedAt() >= $firstDayOfMonth) {
+                    $monthRevenue += $order->getCarrierPrice();
+                }
+            }
+        }
+
+        $averageBasket = count($orders) ? round($totalRevenue / count($orders) / 100, 2) : 0;
+        $totalRevenueEuro = round($totalRevenue / 100, 2);
+        $monthRevenueEuro = round($monthRevenue / 100, 2);
+
         return $this->render('admin/dashboard.html.twig', [
+            'stats' => [
+                'orders' => $ordersStats,
+                'users' => $usersStats,
+                'products' => $productsStats,
+                'revenue' => [
+                    'total' => $totalRevenueEuro,
+                    'month' => $monthRevenueEuro,
+                    'average' => $averageBasket,
+                ]
+            ],
             'active' => 'dashboard',
         ]);
     }
