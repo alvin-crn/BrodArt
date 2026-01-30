@@ -101,7 +101,7 @@ class OrderController extends AbstractController
                 $productSize = $this->em->getRepository(ProductSize::class)->find($product['id_size']);
 
                 $orderDetails = new OrderDetails();
-                $orderDetails->setProduct($product['product']->getName());
+                $orderDetails->setProductName($product['product']->getName());
                 $orderDetails->setSize($product['size']);
                 $orderDetails->setQuantity($product['quantity']);
                 $orderDetails->setPrice($product_price);

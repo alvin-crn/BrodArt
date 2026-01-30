@@ -1,0 +1,125 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Commande {{ order.reference }} - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/order-show.css') }}">
+{% endblock css %}
+
+{% block admin_content %}
+<div class="order-show">
+
+  <div class="order-header">
+    <h1>Commande {{ order.reference }}</h1>
+    <span class="order-date">
+      {{ order.createdAt|date('d/m/Y H:i') }}
+    </span>
+  </div>
+
+  <!-- Infos commande -->
+  <div class="order-card">
+    <h2>Informations générales</h2>
+
+    <div class="order-info-grid">
+      <div>
+        <strong>Email client</strong>
+        <p><a href="{{ path('admin_user_show', {id: order.user.id}) }}" target="_blank">{{ order.user.email }}</a></p>
+      </div>
+
+      <div>
+        <strong>Statut actuel</strong>
+        {% if order.state == 0 %}
+        <span class="badge unvalidated">Commande non validée</span>
+        {% elseif order.state == 1 %}
+        <span class="badge validated">Commande reçue</span>
+        {% elseif order.state == 2 %}
+        <span class="badge preparing">En préparation</span>
+        {% elseif order.state == 3 %}
+        <span class="badge sent">Expédiée</span>
+        {% elseif order.state == 4 %}
+        <span class="badge cancelled">Annulée</span>
+        {% endif %}
+      </div>
+
+      <div>
+        <h2>Adresse de livraison</h2>
+        <div class="order-delivery-address">
+          {{ order.delivery|raw }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-card">
+    <strong>Commentaire client</strong>
+    <p>{{ order.comment ? order.comment : 'Aucun commentaire' }}</p>
+  </div>
+
+  <!-- Changement de statut -->
+  <div class="order-card">
+    <h2>Changer le statut</h2>
+
+    <form method="post" action="{{ path('admin_order_update_state', {id: order.id}) }}" class="order-state-form">
+      <select name="state">
+        <option value="1" {{ order.state==1 ? 'selected' }}>Commande à traiter</option>
+        <option value="2" {{ order.state==2 ? 'selected' }}>En préparation</option>
+        <option value="3" {{ order.state==3 ? 'selected' }}>Expédiée</option>
+        <option value="4" {{ order.state==4 ? 'selected' }}>Annulée</option>
+      </select>
+
+      <button type="submit">Mettre à jour</button>
+    </form>
+  </div>
+
+  <!-- Détails commande -->
+  <div class="order-card">
+    <h2>Détails de la commande</h2>
+
+    <table class="order-table">
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Photo du produit</th>
+          <th>Photo du client</th>
+          <th>Taille</th>
+          <th>Prix unitaire</th>
+          <th>Quantité</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in order.orderDetails %}
+        <tr>
+          <td><a href="{{ path('product', {slug: row.productSize.product.slug}) }}" target="_blank">{{ row.productName
+              }}</a></td>
+          <td><img src="{{ asset('media/product/' ~ row.productSize.product.illustration) }}"
+              alt="{{ row.productName }}"></td>
+          <td>
+            {% if order.state == 0 %}
+            <img src="{{ path('unvalided_order_client_photo', { filename: row.photoClient }) }}"
+              alt="{{ row.photoClient }}">
+            {% else %}
+            <img src="{{ path('valided_order_client_photo', { filename: row.photoClient }) }}"
+              alt="{{ row.photoClient }}">
+            {% endif %}
+          </td>
+          <td>{{ row.size }}</td>
+          <td>{{ (row.price / 100)|number_format(2, ',', ' ') }} €</td>
+          <td>{{ row.quantity }}</td>
+          <td>{{ (row.total / 100)|number_format(2, ',', ' ') }} €</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="6">Frais de port <i class="fa-solid fa-truck-fast"></i></td>
+          <td>{{ (order.carrierPrice / 100)|number_format(2, ',', ' ') }} €</td>
+        </tr>
+        <tr>
+          <td colspan="6"><strong>Total général</strong></td>
+          <td><strong>{{ ((order.total + order.carrierPrice) / 100)|number_format(2, ',', ' ') }} €</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock admin_content %}

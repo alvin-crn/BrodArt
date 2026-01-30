@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Size;
 use App\Entity\User;
 use App\Entity\Color;
+use App\Entity\Order;
 use App\Form\SizeType;
 use App\Entity\Product;
 use App\Form\ColorType;
@@ -543,5 +544,44 @@ final class AdminController extends AbstractController
         );
 
         $product->$setter($filename);
+    }
+
+    #[Route('/commandes', name: 'orders')]
+    public function orders(): Response
+    {
+        return $this->render('admin/order/order.html.twig', [
+            'orders' => $this->em->getRepository(Order::class)->findAll(),
+            'active' => 'orders',
+        ]);
+    }
+
+    #[Route('/commandes/{reference}', name: 'order_show')]
+    public function orderShow(string $reference): Response
+    {
+        $order = $this->em->getRepository(Order::class)->findOneBy(['reference' => $reference]);
+
+        if (!$order) {
+            throw $this->createNotFoundException('Commande non trouvée');
+        }
+
+        return $this->render('admin/order/order_show.html.twig', [
+            'order' => $order,
+            'active' => 'orders',
+        ]);
+    }
+
+    #[Route('/commande/{id}/state', name: 'order_update_state', methods: ['POST'])]
+    public function updateOrderState(Order $order, Request $request): Response
+    {
+        $state = (int) $request->request->get('state');
+
+        $order->setState($state);
+        $this->em->flush();
+
+        $this->addFlash('success', 'Statut de la commande mis à jour');
+
+        return $this->redirectToRoute('admin_order_show', [
+            'reference' => $order->getReference()
+        ]);
     }
 }

@@ -19,7 +19,7 @@ class OrderDetails
     private $myOrder;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $product;
+    private $productName;
 
     #[ORM\Column(type: 'integer')]
     private $quantity;
@@ -42,7 +42,7 @@ class OrderDetails
 
     public function __toString()
     {
-        return $this->getQuantity() . ' x ' . $this->getProduct() . ' en taille ' . $this->getSize() . ' avec la photo ' . $this->getPhotoClient() . ' (à ' . number_format(($this->getPrice() / 100), 2, ',', ',') . '€ l\'unité)';
+        return $this->getQuantity() . ' x ' . $this->getProductName() . ' en taille ' . $this->getSize() . ' avec la photo ' . $this->getPhotoClient() . ' (à ' . number_format(($this->getPrice() / 100), 2, ',', ',') . '€ l\'unité)';
     }
 
     public function getId(): ?int
@@ -62,14 +62,14 @@ class OrderDetails
         return $this;
     }
 
-    public function getProduct(): ?string
+    public function getProductName(): ?string
     {
-        return $this->product;
+        return $this->productName;
     }
 
-    public function setProduct(string $product): self
+    public function setProductName(string $productName): self
     {
-        $this->product = $product;
+        $this->productName = $productName;
 
         return $this;
     }

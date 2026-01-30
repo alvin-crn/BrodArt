@@ -55,7 +55,8 @@
   color: white;
 }
 
-#entity-search {
+#entity-search,
+#order-search {
   padding: 5px 10px;
   font-size: 14px;
   border-radius: 4px;
@@ -103,4 +104,84 @@
   background-color: #ffc107;
   /* jaune */
   color: #212529;
+}
+
+/* Style du select pour le filtre par état */
+#order-state-filter {
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  height: 34px; /* même hauteur que l’input */
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.entity-controls {
+  gap: 10px;
+}
+
+#order-state-filter:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+#order-state-filter option {
+  padding: 6px;
+}
+
+/* ===== Badges statut commande ===== */
+.order-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.order-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Commande non validée */
+.order-badge.unvalidated {
+  background-color: #ffd4d4;
+  color: #890404;
+}
+
+/* Commande validé */
+.order-badge.validated {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+/* En préparation */
+.order-badge.preparing {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* Expédiée */
+.order-badge.sent {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+/* Annulée */
+.order-badge.cancelled {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* Inconnu */
+.order-badge.unknown {
+  background-color: #f3f4f6;
+  color: #374151;
 }

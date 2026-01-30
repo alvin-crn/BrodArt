@@ -1,0 +1,78 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration commandes - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/entity-table.css') }}">
+{% endblock css %}
+
+{% block admin_content %}
+<div class="entity-controls">
+  <input type="text" id="order-search" placeholder="Rechercher par référence ou email..." />
+
+  <select id="order-state-filter">
+    <option value="">Tous les statuts</option>
+    <option value="0">Commande non validée</option>
+    <option value="1">Commande reçue</option>
+    <option value="2">En préparation</option>
+    <option value="3">Expédiée</option>
+    <option value="4">Annulée</option>
+  </select>
+</div>
+
+{% for label, messages in app.flashes %}
+<div class="flash-messages flash-{{ label }}">
+  {% for message in messages %}
+  <div class="flash-message">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div class="table-wrapper">
+  <table class="admin-table" id="entity-table">
+    <thead>
+      <tr>
+        <th>Référence</th>
+        <th>Date</th>
+        <th>Email</th>
+        <th>Statut</th>
+        <th><i class="fa-solid fa-gears"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr data-reference="{{ order.reference|lower }}" data-email="{{ order.user.email|lower }}"
+        data-state="{{ order.state }}">
+        <td>{{ order.reference }}</td>
+        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+        <td>{{ order.user.email }}</td>
+        <td>
+          {% if order.state == 0 %}
+          <span class="order-badge unvalidated">Commande non validée</span>
+          {% elseif order.state == 1 %}
+          <span class="order-badge validated">Commande reçue</span>
+          {% elseif order.state == 2 %}
+          <span class="order-badge preparing">En préparation</span>
+          {% elseif order.state == 3 %}
+          <span class="order-badge sent">Expédiée</span>
+          {% elseif order.state == 4 %}
+          <span class="order-badge cancelled">Annulée</span>
+          {% else %}
+          <span class="order-badge unknown">Inconnu</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ path('admin_order_show', { reference: order.reference }) }}" class="btn-action">
+            <i class="fa-solid fa-eye"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% block script %}
+<script src="{{ asset('js/admin/order.js') }}"></script>
+{% endblock script %}
+{% endblock admin_content %}
