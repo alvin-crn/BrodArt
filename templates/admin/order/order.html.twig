@@ -13,7 +13,7 @@
   <select id="order-state-filter">
     <option value="">Tous les statuts</option>
     <option value="0">Commande non validée</option>
-    <option value="1">Commande reçue</option>
+    <option value="1">Commande à traiter</option>
     <option value="2">En préparation</option>
     <option value="3">Expédiée</option>
     <option value="4">Annulée</option>
@@ -50,7 +50,7 @@
           {% if order.state == 0 %}
           <span class="order-badge unvalidated">Commande non validée</span>
           {% elseif order.state == 1 %}
-          <span class="order-badge validated">Commande reçue</span>
+          <span class="order-badge validated">Commande à traiter</span>
           {% elseif order.state == 2 %}
           <span class="order-badge preparing">En préparation</span>
           {% elseif order.state == 3 %}

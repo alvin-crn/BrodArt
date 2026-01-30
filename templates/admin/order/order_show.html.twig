@@ -9,6 +9,14 @@
 {% block admin_content %}
 <div class="order-show">
 
+  {% for label, messages in app.flashes %}
+  <div class="flash-messages flash-{{ label }}">
+    {% for message in messages %}
+    <div class="flash-message">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
   <div class="order-header">
     <h1>Commande {{ order.reference }}</h1>
     <span class="order-date">
@@ -31,7 +39,7 @@
         {% if order.state == 0 %}
         <span class="badge unvalidated">Commande non validée</span>
         {% elseif order.state == 1 %}
-        <span class="badge validated">Commande reçue</span>
+        <span class="badge validated">Commande à traiter</span>
         {% elseif order.state == 2 %}
         <span class="badge preparing">En préparation</span>
         {% elseif order.state == 3 %}
