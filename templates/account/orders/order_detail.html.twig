@@ -7,12 +7,16 @@
         <p>Référence de la commande : {{ order.reference }}</p>
         <p>Commande passée le : {{ order.createdAt|date('d/m/Y') }}</p>
         <p>Statue de la commande :
-            {% if order.state == 1 %}
+            {% if order.state == 0 %}
+            Cette commande a été commencée mais pas encore validée et payée.
+            {% elseif order.state == 1 %}
             Nous avons reçu votre commande, nous la préparerons dès que possible.
             {% elseif order.state == 2 %}
             Nous préparons votre commande.
             {% elseif order.state == 3 %}
             Nous avons envoyée votre commande.
+            {% elseif order.state == 4 %}
+            Votre commande a été annulée.
             {% endif %}</p>
         <br>
         <table>
@@ -27,14 +31,23 @@
                 </tr>
             </thead>
             <tbody>
-                {% for product in order.orderDetails %}
+                {% for row in order.orderDetails %}
                 <tr>
-                    <td><img src="{{ path('valided_order_client_photo', { filename: product.photoClient }) }}" alt="votre photo : {{ product.photoClient }}"></td>
-                    <td>{{ product.product }}</td>
-                    <td>{{ product.size }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>{{ ( product.price / 100 )|number_format(2, ',', ',') }} €</td>
-                    <td>{{ ( product.total / 100 )|number_format(2, ',', ',') }} €</td>
+                    <td>
+                        {% if order.state == 0 %}
+                        <img src="{{ path('unvalided_order_client_photo', { filename: row.photoClient }) }}"
+                            alt="votre photo : {{ row.photoClient }}">
+                        {% else %}
+                        <img src="{{ path('valided_order_client_photo', { filename: row.photoClient }) }}"
+                            alt="votre photo : {{ row.photoClient }}">
+                        {% endif %}
+
+                    </td>
+                    <td>{{ row.productName }}</td>
+                    <td>{{ row.size }}</td>
+                    <td>{{ row.quantity }}</td>
+                    <td>{{ ( row.productSize.product.price / 100 )|number_format(2, ',', ',') }} €</td>
+                    <td>{{ ( row.total / 100 )|number_format(2, ',', ',') }} €</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -45,5 +58,8 @@
             <strong>Livraison : </strong>{{ (order.carrierPrice / 100)|number_format(2, ',', ',') }} €<br>
             <strong>Total : </strong>{{ ((order.carrierPrice + order.getTotal) / 100 )|number_format(2, ',', ',') }} €
         </div>
+        {% if order.state == 0 %}
+        <a href="{{ path('order_payment', { 'ref' : order.reference }) }}"><button><span>Finaliser ma commande</span></button></a>
+        {% endif %}
     </div>
 </div>

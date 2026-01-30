@@ -141,7 +141,7 @@ class AccountController extends AbstractController
     #[Route('/mes-commandes', name: '_orders')]
     public function myOrders(): Response
     {
-        $orders = $this->em->getRepository(Order::class)->findSuccessOrders($this->getUser());
+        $orders = $this->em->getRepository(Order::class)->findBy(['user' => $this->getUser()], ['createdAt' => 'DESC']);
        
         return $this->render('account/index.html.twig', [
             'orders' => $orders,

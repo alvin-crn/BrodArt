@@ -14,7 +14,13 @@
             <thead>
                 <tr>
                     <th>Référence</th>
-                    <th>Passée le</th>
+                    <th>
+                        {% if order.state == 0 %}
+                            Commencée le
+                        {% else %}
+                            Passée le
+                        {% endif %}
+                    </th>
                     <th>Produit(s)</th>
                     <th>Total</th>
                 </tr>
