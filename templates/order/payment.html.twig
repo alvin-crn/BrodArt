@@ -16,20 +16,20 @@
             <h2>Récapitulatif de votre commande n°{{ order.reference }}</h2>
             {% set articlesTotal = 0 %}
             <ul class="order-items">
-                {% for detail in order.orderDetails %}
-                {% set articlesTotal = articlesTotal + detail.total %}
+                {% for row in order.orderDetails %}
+                {% set articlesTotal = articlesTotal + row.total %}
 
                 <li class="order-item">
-                    <img src="{{ asset('media/product/' ~ detail.productSize.product.illustration) }}" alt="{{ detail.productSize.product.name }}" class="item-photo">
-                    <img src="{{ path('unvalided_order_client_photo', { filename: detail.photoClient }) }}" alt="Photo personnalisée" class="item-photo">
+                    <img src="{{ asset('media/product/' ~ row.productSize.product.illustration) }}" alt="{{ row.productSize.product.name }}" class="item-photo">
+                    <img src="{{ path('unvalided_order_client_photo', { filename: row.photoClient }) }}" alt="Photo personnalisée" class="item-photo">
                     <div class="item-info">
-                        <p class="item-name">{{ detail.product }}</p>
-                        <p class="item-size">Taille : {{ detail.size }}</p>
-                        <p class="item-quantity">Quantité : {{ detail.quantity }}</p>
+                        <p class="item-name">{{ row.productName }}</p>
+                        <p class="item-size">Taille : {{ row.size }}</p>
+                        <p class="item-quantity">Quantité : {{ row.quantity }}</p>
                     </div>
 
                     <p class="item-total">
-                        {{ (detail.total / 100)|number_format(2, ',', '.') }} €
+                        {{ (row.total / 100)|number_format(2, ',', '.') }} €
                     </p>
                 </li>
                 {% endfor %}
