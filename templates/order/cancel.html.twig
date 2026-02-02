@@ -8,7 +8,7 @@
         <h2>Erreur de paiement pour votre commande n°<strong>{{ order.reference }}</strong></h2>
         <p>Bonjour {{ order.user.firstname }}, <br>
         il semblerait que votre paiement est échoué...</p>
-        <p>Vous pouvez <a href="">réessayer le paiment</a> ici</p>
+        <p>Vous pouvez <a href="{{ path('order_payment', {'ref': order.reference}) }}" style="color: #007bff; text-decoration: underline;">réessayer le paiment</a> ici</p>
         </div>
     </div>
 {% endblock %}
