@@ -1,0 +1,24 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/create-entity.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<h1>Ajouter une image au carousel</h1>
+
+<div class="form-wrapper">
+  {{ form_start(form) }}
+
+  <div class="form-group">
+    {{ form_label(form.file) }}
+    {{ form_widget(form.file) }}
+    {{ form_errors(form.file) }}
+  </div>
+
+  <button type="submit" class="btn btn-primary">Ajouter l'image</button>
+
+  {{ form_end(form) }}
+</div>
+
+{% endblock %}

@@ -7,6 +7,7 @@ parameters:
     UPLOAD_CLIENT_PHOTO_DIR: '%kernel.project_dir%/var/uploads/personalized_pic'
     UPLOAD_UNVALIDED_ORDER_PHOTO_DIR: '%kernel.project_dir%/var/uploads/unvalided_order'
     UPLOAD_VALIDED_ORDER_PHOTO_DIR: '%kernel.project_dir%/var/uploads/valided_order'
+    CARROUSEL_DIR: '%kernel.project_dir%/public/media/carrousel'
 
 services:
     # default configuration for services in *this* file

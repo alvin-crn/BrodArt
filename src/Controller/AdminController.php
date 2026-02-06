@@ -6,10 +6,12 @@ use App\Entity\Size;
 use App\Entity\User;
 use App\Entity\Color;
 use App\Entity\Order;
+use App\Entity\Header;
 use App\Form\SizeType;
 use App\Entity\Product;
 use App\Form\ColorType;
 use App\Entity\Category;
+use App\Form\HeaderType;
 use App\Form\ProductType;
 use App\Form\CategoryType;
 use App\Entity\ProductSize;
@@ -657,5 +659,64 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('admin_order_show', [
             'reference' => $order->getReference()
         ]);
+    }
+
+    #[Route('/carrousel', name: 'header')]
+    public function header(): Response
+    {
+        return $this->render('admin/header/header.html.twig', [
+            'headers' => $this->em->getRepository(Header::class)->findAll(),
+            'active' => 'header',
+        ]);
+    }
+
+    #[Route('/carrousel/nouveau', name: 'header_new')]
+    public function createHeader(Request $request): Response
+    {
+        $image = new Header();
+        $form = $this->createForm(HeaderType::class, $image);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('file')->getData();
+
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('CARROUSEL_DIR'), $filename);
+                $image->setIllustration($filename);
+            }
+
+            $this->em->persist($image);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Le carrousel a été ajouté avec succès.');
+
+            return $this->redirectToRoute('admin_header');
+        }
+
+        return $this->render('admin/header/new.html.twig', [
+            'form' => $form,
+            'active' => 'header',
+        ]);
+    }
+
+    #[Route('/header/delete/{id}', name: 'header_delete')]
+    public function deleteHeader(int $id): Response
+    {
+        $header = $this->em->getRepository(Header::class)->find($id);
+        if (!$header) {
+            throw $this->createNotFoundException('Carrousel introuvable');
+        }
+
+        $filePath = $this->getParameter('CARROUSEL_DIR') . '/' . $header->getIllustration();
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $this->em->remove($header);
+        $this->em->flush();
+
+        $this->addFlash('success', 'Le carrousel a été supprimé avec succès.');
+        return $this->redirectToRoute('admin_header');
     }
 }

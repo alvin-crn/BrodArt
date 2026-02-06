@@ -18,6 +18,7 @@
         </div>
         <nav class="sidebar-menu">
             <a href="{{ path('admin_dashboard') }}" class="{% if active == "dashboard" %}active{% endif %}">Dashboard</a>
+            <a href="{{ path('admin_header') }}" class="{% if active == "header" %}active{% endif %}">Carrousel</a>
             <a href="{{ path('admin_user') }}" class="{% if active == "user" %}active{% endif %}">Utilisateurs</a>
             <a href="{{ path('admin_products') }}" class="{% if active == "products" %}active{% endif %}">Articles</a>
             <a href="{{ path('admin_categories') }}" class="{% if active == "categories" %}active{% endif %}">Catégories</a>

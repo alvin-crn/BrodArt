@@ -1,0 +1,47 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration Carrousel - Brod'Art{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('css/admin/entity-table.css') }}">
+{% endblock css %}
+
+{% block admin_content %}
+<div class="entity-controls">
+  <a href="{{ path('admin_header_new') }}" class="btn btn-create"><i class="fa-solid fa-circle-plus"></i> Nouveau
+    carrousel</a>
+</div>
+
+{% for label, messages in app.flashes %}
+<div class="flash-messages flash-{{ label }}">
+  {% for message in messages %}
+  <div class="flash-message">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div class="table-wrapper">
+  <table class="admin-table" id="entity-table">
+    <thead>
+      <tr>
+        <th>Aperçu</th>
+        <th>Nom du fichier</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for header in headers %}
+      <tr>
+        <td><img src="{{ asset('media/carrousel/' ~ header.illustration) }}" alt="{{ header.illustration }}" width="120"></td>
+        <td>{{ header.illustration }}</td>
+        <td>
+          <a href="{{ path('admin_header_delete', {id: header.id}) }}" class="btn-action btn-delete">
+            <i class="fa-solid fa-trash"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
