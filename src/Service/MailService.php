@@ -16,7 +16,7 @@ class MailService
 
   public function sendEmail(string $to, string $subject, string $content, ?string $from = null): void
   {
-    $SENDER_EMAIL = $from ?? 'contact.brodart@gmail.com';
+    $SENDER_EMAIL = $from ?? 'contact@brodart.alvincrn.fr';
     $body = [
       'Messages' => [
         [
@@ -34,6 +34,6 @@ class MailService
       ]
     ];
 
-    $response = $this->mj->post(Resources::$Email, ['body' => $body]);
+    $this->mj->post(Resources::$Email, ['body' => $body]);
   }
 }
