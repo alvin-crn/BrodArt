@@ -98,6 +98,7 @@ nav ul li.btn-1 {
 
 nav ul li.btn-1 a.btn-1 {
     min-width: 110px;
+    display: flex;
 }
 
 nav ul li.btn-1 a.btn-1:hover {
